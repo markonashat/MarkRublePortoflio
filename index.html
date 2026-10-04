@@ -1,0 +1,3433 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="pageTitle">MarkRuble | Video Editor</title>
+    <meta
+      name="description"
+      id="metaDescription"
+      content="MarkRuble - Video Editor, Colorist & Motion Designer. DaVinci Resolve Studio, After Effects, editing, color grading and motion graphics — backed by marketing, design and programming experience."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --primary: #8b5cf6;
+        --primary-dark: #6d28d9;
+        --accent: #f59e0b;
+        --bg: #0a0a0f;
+        --bg-card: #12121a;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --whatsapp: #25d366;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Cairo", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+        line-height: 1.7;
+      }
+
+      /* ========== PRELOADER ========== */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: #0a0a0f;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition:
+          opacity 0.6s,
+          visibility 0.6s;
+      }
+      #preloader.hide {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .loader-logo {
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1.5rem;
+        animation: pulseLogo 1.5s ease infinite;
+      }
+      @keyframes pulseLogo {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.05);
+          opacity: 0.85;
+        }
+      }
+      .loader-bar {
+        width: 180px;
+        height: 3px;
+        background: rgba(139, 92, 246, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .loader-bar span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        animation: loadBar 1.8s ease forwards;
+      }
+      @keyframes loadBar {
+        to {
+          width: 100%;
+        }
+      }
+
+      /* ========== NAVBAR ========== */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.2rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background: rgba(10, 10, 15, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+        transition: all 0.4s;
+      }
+      nav.scrolled {
+        padding: 0.8rem 5%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      .logo {
+        font-size: 1.6rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        position: relative;
+        transition: color 0.3s;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        right: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: width 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+      .nav-links a.active {
+        color: var(--text);
+      }
+      .nav-links a.active::after {
+        width: 100%;
+      }
+      .menu-btn {
+        display: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .language-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 72px;
+        height: 42px;
+        padding: 0 0.9rem;
+        border-radius: 999px;
+        border: 1px solid rgba(139, 92, 246, 0.55);
+        background: rgba(139, 92, 246, 0.16);
+        color: var(--text);
+        font:
+          800 0.82rem "Cairo",
+          sans-serif;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        transition: all 0.3s;
+        flex-shrink: 0;
+      }
+      .language-btn:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(139, 92, 246, 0.28);
+      }
+      .language-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .language-btn i {
+        color: var(--accent);
+      }
+      .language-btn:hover i {
+        color: #fff;
+      }
+      html[dir="ltr"] .service-features {
+        text-align: left;
+      }
+      html[dir="ltr"] .nav-links a::after {
+        right: auto;
+        left: 0;
+      }
+      html[dir="ltr"] .service-card.popular::before {
+        left: auto;
+        right: -30px;
+        transform: rotate(45deg);
+      }
+      html[dir="ltr"] .whatsapp-float {
+        left: auto;
+        right: 30px;
+      }
+      html[dir="ltr"] .whatsapp-tooltip {
+        right: auto;
+        left: 80px;
+      }
+      html[dir="ltr"] .whatsapp-float:hover .whatsapp-tooltip {
+        right: auto;
+        left: 85px;
+      }
+
+      /* ========== HERO ========== */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 0 5%;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse at 20% 50%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 20%,
+            rgba(245, 158, 11, 0.1) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            ellipse at 60% 80%,
+            rgba(139, 92, 246, 0.08) 0%,
+            transparent 40%
+          );
+        z-index: 0;
+      }
+      .particles {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 50%;
+        opacity: 0.4;
+        animation: floatParticle 15s infinite linear;
+      }
+      @keyframes floatParticle {
+        0% {
+          transform: translateY(100vh) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.6;
+        }
+        90% {
+          opacity: 0.4;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1);
+          opacity: 0;
+        }
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 900px;
+      }
+      .hero-badge {
+        display: inline-block;
+        padding: 0.4rem 1.2rem;
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 50px;
+        font-size: 0.85rem;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        animation: fadeInDown 1s ease;
+      }
+      .hero h1 {
+        font-size: clamp(2.8rem, 8vw, 5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1s ease 0.2s both;
+      }
+      .hero h1 span {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero p {
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        color: var(--text-muted);
+        max-width: 760px;
+        margin: 0 auto 2.5rem;
+        animation: fadeInUp 1s ease 0.4s both;
+      }
+      .hero-btns {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1s ease 0.6s both;
+      }
+      .btn {
+        padding: 0.9rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        border: none;
+      }
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+      }
+      .btn-primary:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border: 2px solid rgba(139, 92, 246, 0.5);
+      }
+      .btn-outline:hover {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: var(--primary);
+        transform: translateY(-4px);
+      }
+
+      /* ========== SECTIONS ========== */
+      section {
+        padding: 6rem 5%;
+        position: relative;
+        scroll-margin-top: 90px;
+      }
+      .section-title {
+        text-align: center;
+        margin-bottom: 3.5rem;
+      }
+      .section-title h2 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .section-title h2 span {
+        color: var(--primary);
+      }
+      .section-title p {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+      }
+
+      /* ========== ABOUT ========== */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 4rem;
+        align-items: center;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .about-img {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        aspect-ratio: 1;
+        background: linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.2),
+          rgba(245, 158, 11, 0.1)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6rem;
+        color: var(--primary);
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+      .about-img::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px solid rgba(139, 92, 246, 0.3);
+        border-radius: 20px;
+        animation: borderPulse 3s ease infinite;
+      }
+      @keyframes borderPulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .about-text h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+      }
+      .about-text p {
+        color: var(--text-muted);
+        margin-bottom: 1.2rem;
+        font-size: 1.05rem;
+      }
+      .stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-num {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary);
+        display: block;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      /* ========== SERVICES + PRICES ========== */
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .service-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        transition: all 0.4s;
+        position: relative;
+        overflow: hidden;
+      }
+      .service-card.service-longform {
+        order: 1;
+      }
+      .service-card.service-reels {
+        order: 2;
+      }
+      .service-card.service-ads {
+        order: 3;
+      }
+      .service-card.popular {
+        border-color: var(--primary);
+        transform: scale(1.03);
+      }
+      .service-card.popular::before {
+        content: attr(data-popular);
+        position: absolute;
+        top: 15px;
+        left: -30px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.3rem 2.5rem;
+        transform: rotate(-45deg);
+      }
+      .service-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+      }
+      .service-card.popular:hover {
+        transform: scale(1.03) translateY(-10px);
+      }
+      .service-icon {
+        font-size: 2.8rem;
+        color: var(--primary);
+        margin-bottom: 1.2rem;
+      }
+      .service-card h3 {
+        font-size: 1.35rem;
+        margin-bottom: 0.8rem;
+      }
+      .service-card .price {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--accent);
+        margin: 1rem 0;
+      }
+      .service-card .price span {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-muted);
+      }
+      .service-features {
+        list-style: none;
+        text-align: right;
+        margin: 1.5rem 0;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+      .service-features li {
+        padding: 0.4rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .service-features li i {
+        color: var(--primary);
+        font-size: 0.85rem;
+      }
+      .service-card .btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      /* ========== SKILLS ========== */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .skill-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 16px;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        transition: all 0.4s;
+        position: relative;
+        overflow: hidden;
+      }
+      .skill-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transform: scaleX(0);
+        transition: transform 0.4s;
+      }
+      .skill-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+      }
+      .skill-card:hover::before {
+        transform: scaleX(1);
+      }
+      .skill-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+        transition: transform 0.4s;
+      }
+      .skill-card:hover .skill-icon {
+        transform: scale(1.15) rotate(5deg);
+      }
+      .skill-card h4 {
+        font-size: 1.05rem;
+        margin-bottom: 0.3rem;
+      }
+      .skill-card p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      /* ========== PORTFOLIO ========== */
+      .filter-btns {
+        display: flex;
+        justify-content: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        margin-bottom: 2.5rem;
+      }
+      .filter-btn {
+        padding: 0.55rem 1.4rem;
+        border-radius: 50px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        background: transparent;
+        color: var(--text-muted);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: "Cairo", sans-serif;
+        font-size: 0.9rem;
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .project-card {
+        background: var(--bg-card);
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(139, 92, 246, 0.12);
+        transition: all 0.45s;
+        cursor: pointer;
+      }
+      .project-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        border-color: rgba(139, 92, 246, 0.35);
+      }
+      .project-img {
+        height: 210px;
+        background: linear-gradient(135deg, #1e1b4b, #312e81);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+        color: rgba(255, 255, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+      .project-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        inset: 0;
+      }
+      .project-img .play-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 2;
+      }
+      .project-card:hover .play-overlay {
+        opacity: 1;
+      }
+      .play-overlay i {
+        font-size: 3rem;
+        color: #fff;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      }
+      .project-info {
+        padding: 1.5rem;
+      }
+      .project-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+      }
+      .project-info p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      .project-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .tag {
+        padding: 0.25rem 0.7rem;
+        background: rgba(139, 92, 246, 0.15);
+        border-radius: 20px;
+        font-size: 0.75rem;
+        color: var(--primary);
+      }
+
+      /* ========== MODAL ========== */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.35s;
+        padding: 1.5rem;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .modal {
+        background: var(--bg-card);
+        border-radius: 20px;
+        max-width: 800px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        transform: scale(0.9) translateY(30px);
+        transition: transform 0.35s;
+        border: 1px solid rgba(139, 92, 246, 0.25);
+      }
+      .modal-overlay.active .modal {
+        transform: scale(1) translateY(0);
+      }
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 10;
+        transition: background 0.3s;
+      }
+      .modal-close:hover {
+        background: var(--primary);
+      }
+      .modal-video {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .modal-video iframe,
+      .modal-video video {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+      .modal-body {
+        padding: 2rem;
+      }
+      .modal-body h2 {
+        font-size: 1.6rem;
+        margin-bottom: 0.8rem;
+      }
+      .modal-body p {
+        color: var(--text-muted);
+        margin-bottom: 1.2rem;
+      }
+      .modal-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ========== WORKFLOW + WHY ME ========== */
+      .workflow-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.25rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .workflow-card,
+      .why-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(139, 92, 246, 0.14);
+        border-radius: 18px;
+        padding: 2rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.35s ease,
+          border-color 0.35s ease,
+          box-shadow 0.35s ease;
+      }
+      .workflow-card:hover,
+      .why-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(139, 92, 246, 0.38);
+        box-shadow: 0 18px 38px rgba(0, 0, 0, 0.26);
+      }
+      .workflow-card .workflow-number {
+        position: absolute;
+        top: 0.9rem;
+        inset-inline-end: 1rem;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--accent);
+        opacity: 0.9;
+      }
+      .workflow-card > i,
+      .why-card > i {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+      .workflow-card h3,
+      .why-card h3 {
+        font-size: 1.12rem;
+        margin-bottom: 0.5rem;
+      }
+      .workflow-card p,
+      .why-card p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        line-height: 1.75;
+      }
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+        max-width: 1050px;
+        margin: 0 auto;
+      }
+      .why-card {
+        text-align: center;
+        padding: 2.2rem 1.7rem;
+      }
+      .about-text strong {
+        color: var(--text);
+        font-weight: 800;
+      }
+      @media (max-width: 900px) {
+        .workflow-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .why-grid {
+          grid-template-columns: 1fr;
+          max-width: 700px;
+        }
+      }
+      @media (max-width: 520px) {
+        .workflow-grid {
+          grid-template-columns: 1fr;
+        }
+        .workflow-card,
+        .why-card {
+          padding: 1.5rem;
+        }
+      }
+
+      /* ========== TESTIMONIALS ========== */
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .testimonial-card {
+        background: var(--bg-card);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        border-radius: 18px;
+        padding: 2rem;
+        position: relative;
+        transition: all 0.4s;
+      }
+      .testimonial-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(139, 92, 246, 0.35);
+      }
+      .testimonial-card .quote {
+        font-size: 2.5rem;
+        color: var(--primary);
+        opacity: 0.3;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+      }
+      .testimonial-text {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .author-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #fff;
+      }
+      .author-info h4 {
+        font-size: 1rem;
+        margin-bottom: 0.15rem;
+      }
+      .author-info span {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      /* ========== CONTACT ========== */
+      .contact-box {
+        max-width: 700px;
+        margin: 0 auto;
+        background: var(--bg-card);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 24px;
+        padding: 3rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .contact-box::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(139, 92, 246, 0.08) 0%,
+          transparent 60%
+        );
+        animation: rotateBg 20s linear infinite;
+      }
+      @keyframes rotateBg {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .contact-box > * {
+        position: relative;
+        z-index: 1;
+      }
+      .contact-box h3 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+      .contact-box p {
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+      .contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .contact-link {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: rgba(139, 92, 246, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        color: var(--primary);
+        transition: all 0.35s;
+        text-decoration: none;
+      }
+      .placeholder-link {
+        opacity: 0.38;
+        cursor: default;
+      }
+      .placeholder-link:hover {
+        background: rgba(139, 92, 246, 0.15);
+        color: var(--primary);
+        transform: none;
+      }
+      .contact-link:hover {
+        background: var(--primary);
+        color: #fff;
+        transform: translateY(-5px) scale(1.1);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(139, 92, 246, 0.1);
+      }
+
+      /* ========== WHATSAPP ========== */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 65px;
+        height: 65px;
+        background: var(--whatsapp);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #fff;
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        z-index: 9999;
+        text-decoration: none;
+        animation:
+          whatsappPulse 2s infinite,
+          whatsappBounce 3s ease-in-out infinite;
+        transition: transform 0.3s;
+      }
+      .whatsapp-float:hover {
+        transform: scale(1.15);
+        animation: none;
+        box-shadow: 0 12px 35px rgba(37, 211, 102, 0.7);
+      }
+      @keyframes whatsappPulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 18px rgba(37, 211, 102, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+        }
+      }
+      @keyframes whatsappBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      .whatsapp-tooltip {
+        position: absolute;
+        right: 80px;
+        background: #128c7e;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s;
+        font-weight: 600;
+      }
+      .whatsapp-float:hover .whatsapp-tooltip {
+        opacity: 1;
+        right: 85px;
+      }
+
+      /* ========== ANIMATIONS ========== */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ========== POLISH + MICRO INTERACTIONS ========== */
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        inset-inline-start: 0;
+        width: 0;
+        height: 3px;
+        z-index: 2000;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        box-shadow: 0 0 18px rgba(139, 92, 246, 0.55);
+        transition: width 0.08s linear;
+        pointer-events: none;
+      }
+
+      .section-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.65rem;
+        color: var(--accent);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        opacity: 0.95;
+      }
+      .section-kicker::before,
+      .section-kicker::after {
+        content: "";
+        width: 22px;
+        height: 1px;
+        background: currentColor;
+        opacity: 0.7;
+      }
+
+      .portfolio-heading {
+        position: relative;
+        display: inline-block;
+      }
+      .title-shimmer {
+        display: inline-block;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 38%,
+          #fff 50%,
+          var(--accent) 62%,
+          var(--primary) 100%
+        );
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: titleShimmer 4.5s linear infinite;
+        filter: drop-shadow(0 0 14px rgba(139, 92, 246, 0.22));
+      }
+      .portfolio-heading::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+        width: 68%;
+        height: 2px;
+        transform: translateX(-50%);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--primary),
+          var(--accent),
+          transparent
+        );
+        background-size: 200% 100%;
+        animation: lineSweep 3.2s ease-in-out infinite;
+        border-radius: 999px;
+      }
+      @keyframes titleShimmer {
+        to {
+          background-position: 220% center;
+        }
+      }
+      @keyframes lineSweep {
+        0%,
+        100% {
+          background-position: 0% 50%;
+          opacity: 0.55;
+        }
+        50% {
+          background-position: 100% 50%;
+          opacity: 1;
+        }
+      }
+
+      .language-btn {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .language-glow {
+        position: absolute;
+        inset: -20%;
+        z-index: -1;
+        background: conic-gradient(
+          from 0deg,
+          transparent,
+          rgba(139, 92, 246, 0.42),
+          transparent,
+          rgba(245, 158, 11, 0.3),
+          transparent
+        );
+        animation: languageGlow 5s linear infinite;
+      }
+      .language-btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 45%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.24),
+          transparent
+        );
+        transform: skewX(-18deg);
+        animation: languageShine 3.8s ease-in-out infinite;
+        pointer-events: none;
+      }
+      .language-globe {
+        transition: transform 0.45s ease;
+      }
+      .language-btn:hover .language-globe,
+      .language-btn.switching .language-globe {
+        transform: rotate(180deg);
+      }
+      .language-chevron {
+        font-size: 0.62rem;
+        opacity: 0.7;
+        transition: transform 0.3s ease;
+      }
+      .language-btn:hover .language-chevron {
+        transform: translateY(2px);
+      }
+      @keyframes languageGlow {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes languageShine {
+        0%,
+        55%,
+        100% {
+          left: -75%;
+        }
+        75% {
+          left: 130%;
+        }
+      }
+
+      .btn-portfolio {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .btn-portfolio::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -70%;
+        width: 42%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.28),
+          transparent
+        );
+        transform: skewX(-18deg);
+        animation: buttonShine 4.4s ease-in-out infinite;
+        pointer-events: none;
+      }
+      @keyframes buttonShine {
+        0%,
+        58%,
+        100% {
+          left: -70%;
+        }
+        76% {
+          left: 125%;
+        }
+      }
+
+      .project-card {
+        transform: translateZ(0);
+      }
+      .project-card:hover .project-img img {
+        transform: scale(1.06);
+      }
+      .project-img img {
+        transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .project-img .play-overlay {
+        transition:
+          opacity 0.35s ease,
+          background 0.35s ease;
+      }
+      .project-card:hover .play-overlay {
+        background: rgba(0, 0, 0, 0.28);
+      }
+
+      .back-to-top {
+        position: fixed;
+        inset-inline-end: 28px;
+        bottom: 28px;
+        width: 46px;
+        height: 46px;
+        border: 1px solid rgba(139, 92, 246, 0.35);
+        border-radius: 50%;
+        background: rgba(18, 18, 26, 0.86);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        z-index: 900;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(10px);
+        transition:
+          opacity 0.3s,
+          visibility 0.3s,
+          transform 0.3s,
+          background 0.3s,
+          border-color 0.3s;
+      }
+      .back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .back-to-top:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        transform: translateY(-3px);
+      }
+
+      .service-card .price small {
+        display: block;
+        margin-bottom: -0.25rem;
+        color: var(--text-muted);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      /* Keep motion tasteful on compact screens. */
+      @media (max-width: 600px) {
+        .section-kicker {
+          font-size: 0.64rem;
+          letter-spacing: 0.12em;
+        }
+        .portfolio-heading::after {
+          bottom: -8px;
+          width: 76%;
+        }
+        .back-to-top {
+          width: 42px;
+          height: 42px;
+          inset-inline-end: 16px;
+          bottom: 86px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .title-shimmer,
+        .portfolio-heading::after,
+        .language-glow,
+        .language-btn::after,
+        .btn-portfolio::after {
+          animation: none !important;
+        }
+        .project-card:hover .project-img img {
+          transform: none;
+        }
+      }
+
+      /* ========== RESPONSIVE ========== */
+      @media (max-width: 900px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+        .about-img {
+          max-width: 320px;
+          margin: 0 auto;
+        }
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 100%;
+          right: 0;
+          left: 0;
+          background: rgba(10, 10, 15, 0.98);
+          flex-direction: column;
+          padding: 1.5rem;
+          gap: 1rem;
+          border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .nav-links.active {
+          display: flex;
+        }
+        .menu-btn {
+          display: block;
+        }
+        .nav-actions {
+          gap: 0.7rem;
+        }
+        .language-btn {
+          padding: 0.45rem 0.7rem;
+        }
+        .service-card.popular {
+          transform: none;
+        }
+        .service-card.popular:hover {
+          transform: translateY(-10px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      @media (max-width: 500px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .whatsapp-float {
+          width: 58px;
+          height: 58px;
+          bottom: 20px;
+          left: 20px;
+          font-size: 1.7rem;
+        }
+        html[dir="ltr"] .whatsapp-float {
+          left: auto;
+          right: 20px;
+        }
+        .contact-box {
+          padding: 2rem 1.5rem;
+        }
+        section {
+          padding: 4.5rem 5%;
+        }
+      }
+
+      /* ========== RESPONSIVE MASTER LAYOUT ========== */
+      /* The portfolio scales fluidly between phones, tablets, laptops and large monitors. */
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      *,
+      *::before,
+      *::after {
+        max-width: 100%;
+      }
+
+      img,
+      video,
+      iframe,
+      svg {
+        max-width: 100%;
+      }
+
+      nav {
+        padding-inline: clamp(1rem, 4vw, 5%);
+      }
+
+      section {
+        padding-inline: clamp(1rem, 5vw, 5%);
+      }
+
+      .hero {
+        min-height: 100svh;
+        padding-inline: clamp(1rem, 5vw, 5%);
+      }
+
+      .hero-content {
+        width: min(100%, 900px);
+      }
+
+      .hero p {
+        font-size: clamp(1rem, 1.5vw, 1.25rem);
+      }
+
+      .section-title h2 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+      }
+
+      .about-grid,
+      .services-grid,
+      .skills-grid,
+      .portfolio-grid,
+      .testimonials-grid {
+        width: 100%;
+      }
+
+      .about-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .portfolio-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .testimonials-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .service-card,
+      .skill-card,
+      .project-card,
+      .testimonial-card,
+      .contact-box,
+      .modal {
+        min-width: 0;
+      }
+
+      .project-card img,
+      .project-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .project-card *,
+      .service-card *,
+      .testimonial-card * {
+        overflow-wrap: anywhere;
+      }
+
+      /* Laptop / small desktop */
+      @media (max-width: 1200px) {
+        .nav-links {
+          gap: clamp(1rem, 2vw, 2rem);
+        }
+
+        .about-grid {
+          gap: 2.5rem;
+        }
+
+        .services-grid,
+        .portfolio-grid,
+        .testimonials-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      /* Tablet */
+      @media (max-width: 900px) {
+        nav {
+          padding-block: 0.9rem;
+        }
+
+        .logo {
+          font-size: 1.4rem;
+        }
+
+        .hero {
+          padding-top: 5rem;
+          padding-bottom: 3rem;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.4rem, 8vw, 4rem);
+        }
+
+        .hero-btns {
+          width: 100%;
+        }
+
+        .hero-btns .btn {
+          min-width: 180px;
+          justify-content: center;
+        }
+
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-img {
+          width: min(100%, 360px);
+        }
+
+        .services-grid,
+        .portfolio-grid,
+        .testimonials-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .skills-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .contact-box {
+          width: 100%;
+        }
+      }
+
+      /* Phones */
+      @media (max-width: 600px) {
+        nav {
+          padding-inline: 1rem;
+        }
+
+        .nav-actions {
+          gap: 0.45rem;
+          margin-inline-start: auto;
+        }
+
+        .language-btn {
+          min-width: 64px;
+          height: 40px;
+          padding: 0 0.7rem;
+          font-size: 0.78rem;
+        }
+
+        .menu-btn {
+          font-size: 1.35rem;
+        }
+
+        .nav-links {
+          padding: 1rem;
+          gap: 0.75rem;
+        }
+
+        section {
+          padding-top: 4rem;
+          padding-bottom: 4rem;
+          padding-inline: 1rem;
+        }
+
+        .hero {
+          min-height: 100svh;
+          padding-inline: 1rem;
+          padding-top: 6rem;
+        }
+
+        .hero-badge {
+          font-size: 0.75rem;
+          padding: 0.35rem 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.1rem, 12vw, 3.2rem);
+          line-height: 1.12;
+        }
+
+        .hero p {
+          font-size: 0.98rem;
+          line-height: 1.8;
+          margin-bottom: 1.75rem;
+        }
+
+        .hero-btns {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.75rem;
+        }
+
+        .hero-btns .btn {
+          width: 100%;
+          min-width: 0;
+          padding: 0.8rem 1rem;
+        }
+
+        .about-text h3 {
+          font-size: 1.35rem;
+        }
+
+        .about-text p {
+          font-size: 0.95rem;
+        }
+
+        .stats {
+          justify-content: center;
+          gap: 1.25rem;
+        }
+
+        .stat {
+          min-width: 80px;
+        }
+
+        .services-grid,
+        .portfolio-grid,
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .skills-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.75rem;
+        }
+
+        .skill-card {
+          padding: 1.25rem 0.75rem;
+        }
+
+        .service-card {
+          padding: 2rem 1.25rem;
+        }
+
+        .project-card {
+          border-radius: 14px;
+        }
+
+        .testimonial-card {
+          padding: 1.5rem;
+        }
+
+        .contact-box {
+          padding: 2rem 1rem;
+          border-radius: 18px;
+        }
+
+        .contact-links {
+          gap: 0.75rem;
+        }
+
+        .modal-overlay {
+          padding: 0.75rem;
+        }
+
+        .modal {
+          max-height: 92svh;
+          border-radius: 16px;
+        }
+
+        .modal-close {
+          top: 10px;
+          left: 10px;
+          width: 36px;
+          height: 36px;
+        }
+
+        .whatsapp-float {
+          width: 56px;
+          height: 56px;
+          bottom: max(16px, env(safe-area-inset-bottom));
+        }
+      }
+
+      /* Very small phones */
+      @media (max-width: 380px) {
+        .logo {
+          font-size: 1.2rem;
+        }
+
+        .language-btn {
+          min-width: 62px;
+          height: 38px;
+          padding: 0 0.65rem;
+          gap: 0.35rem;
+          font-size: 0.76rem;
+        }
+        .language-btn span {
+          display: inline;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-box h3 {
+          font-size: 1.45rem;
+        }
+      }
+
+      /* Landscape phones */
+      @media (max-height: 520px) and (orientation: landscape) {
+        .hero {
+          min-height: auto;
+          padding-top: 7rem;
+          padding-bottom: 4rem;
+        }
+
+        .hero h1 {
+          font-size: clamp(2rem, 7vw, 3rem);
+        }
+      }
+
+      /* Respect phones with a notch / home indicator */
+      @supports (padding: max(0px)) {
+        body {
+          padding-left: env(safe-area-inset-left);
+          padding-right: env(safe-area-inset-right);
+        }
+
+        nav {
+          padding-left: max(1rem, env(safe-area-inset-left));
+          padding-right: max(1rem, env(safe-area-inset-right));
+        }
+      }
+
+      /* Final layout safety */
+      @media (max-width: 900px) {
+        .hero-content {
+          max-width: 760px;
+        }
+        .workflow-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 640px) {
+        section {
+          scroll-margin-top: 78px;
+        }
+        .hero {
+          min-height: 92svh;
+        }
+        .hero-btns {
+          width: 100%;
+        }
+        .hero-btns .btn {
+          flex: 1 1 100%;
+          justify-content: center;
+        }
+        .workflow-grid {
+          grid-template-columns: 1fr;
+        }
+        .modal-content {
+          width: min(94vw, 760px);
+          max-height: 88svh;
+        }
+        .modal-body {
+          padding: 1.35rem;
+        }
+      }
+      @media (max-width: 430px) {
+        nav {
+          padding-inline: 0.8rem;
+        }
+        .logo {
+          font-size: 1.15rem;
+        }
+        .nav-actions {
+          gap: 0.38rem;
+        }
+        .language-btn {
+          min-width: 68px;
+          height: 38px;
+          padding: 0 0.58rem;
+          font-size: 0.73rem;
+        }
+        .language-chevron {
+          display: none;
+        }
+        .hero h1 {
+          font-size: clamp(2rem, 12vw, 2.65rem);
+        }
+        .section-title h2 {
+          font-size: clamp(1.8rem, 8vw, 2.3rem);
+        }
+        .price {
+          font-size: 2.05rem;
+        }
+      }
+
+      /* ========== MOBILE-FIRST POLISH ========== */
+      /* Mobile interaction + readability safeguards */
+      @media (max-width: 640px) {
+        img,
+        video,
+        iframe {
+          max-width: 100%;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        p,
+        a,
+        button,
+        li {
+          overflow-wrap: anywhere;
+        }
+        .hero-content,
+        .section-title,
+        .about-text,
+        .contact-box {
+          max-width: 100%;
+        }
+        .btn {
+          min-height: 48px;
+        }
+      }
+      /* The majority of visitors are expected to come from phones, so the
+         compact layout gets the strongest spacing, hierarchy and tap targets. */
+      .mobile-cta-bar {
+        display: none;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        nav {
+          min-height: 64px;
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+        }
+
+        .logo {
+          line-height: 1;
+          white-space: nowrap;
+        }
+
+        .language-btn,
+        .menu-btn {
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .language-btn {
+          min-height: 42px;
+          min-width: 70px;
+          justify-content: center;
+          border-radius: 12px;
+          box-shadow: 0 8px 24px rgba(139, 92, 246, 0.16);
+        }
+
+        .menu-btn {
+          width: 42px;
+          height: 42px;
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(139, 92, 246, 0.22);
+          border-radius: 12px;
+          background: rgba(255, 255, 255, 0.045);
+        }
+
+        .nav-links {
+          top: calc(100% + 6px);
+          width: calc(100% - 1.6rem);
+          margin-inline: 0.8rem;
+          border: 1px solid rgba(139, 92, 246, 0.16);
+          border-radius: 16px;
+          box-shadow: 0 22px 50px rgba(0, 0, 0, 0.38);
+        }
+
+        .nav-links a {
+          display: block;
+          padding: 0.65rem 0.8rem;
+          border-radius: 10px;
+        }
+
+        .nav-links a:active,
+        .nav-links a:hover {
+          background: rgba(139, 92, 246, 0.09);
+        }
+
+        .hero {
+          padding-top: 6.25rem;
+          padding-bottom: 5.25rem;
+          min-height: 100svh;
+          align-items: center;
+        }
+
+        .hero-content {
+          width: 100%;
+        }
+
+        .hero-badge {
+          font-size: 0.74rem;
+          padding: 0.38rem 0.85rem;
+          margin-bottom: 1.15rem;
+        }
+
+        .hero h1 {
+          font-size: clamp(2.15rem, 12vw, 3rem);
+          line-height: 1.08;
+          letter-spacing: -0.025em;
+          margin-bottom: 1rem;
+        }
+
+        .hero p {
+          max-width: 42rem;
+          font-size: 0.98rem;
+          line-height: 1.85;
+          margin-bottom: 1.6rem;
+        }
+
+        .hero-btns {
+          gap: 0.75rem;
+        }
+
+        .hero-btns .btn {
+          width: 100%;
+          min-height: 50px;
+          padding-inline: 1.2rem;
+          justify-content: center;
+        }
+
+        section {
+          padding-top: 4.75rem;
+          padding-bottom: 4.75rem;
+        }
+
+        .section-title {
+          margin-bottom: 2.25rem;
+        }
+
+        .section-title h2 {
+          font-size: clamp(1.8rem, 9vw, 2.35rem);
+          line-height: 1.15;
+        }
+
+        .section-title p {
+          font-size: 0.92rem;
+          line-height: 1.75;
+        }
+
+        .about-grid,
+        .services-grid,
+        .portfolio-grid,
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .about-img {
+          max-width: 300px;
+        }
+
+        .about-text p {
+          font-size: 0.95rem;
+          line-height: 1.85;
+        }
+
+        .stats {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1rem;
+          margin-top: 1.5rem;
+        }
+
+        .stat {
+          padding: 0.9rem 0.5rem;
+          background: rgba(255, 255, 255, 0.025);
+          border: 1px solid rgba(139, 92, 246, 0.1);
+          border-radius: 14px;
+        }
+
+        .stat-num {
+          font-size: 1.65rem;
+        }
+
+        .services-grid {
+          gap: 1rem;
+        }
+
+        .service-card {
+          padding: 1.65rem 1.1rem;
+          border-radius: 18px;
+        }
+
+        .service-card.popular {
+          transform: none;
+        }
+
+        .service-card .btn {
+          width: 100%;
+          min-height: 48px;
+          justify-content: center;
+        }
+
+        .skills-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.8rem;
+        }
+
+        .skill-card {
+          padding: 1.1rem 0.75rem;
+          border-radius: 14px;
+        }
+
+        .filter-btns {
+          width: 100%;
+          justify-content: flex-start;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          overflow-y: hidden;
+          padding: 0.2rem 0 0.55rem;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-btns::-webkit-scrollbar {
+          display: none;
+        }
+
+        .filter-btn {
+          flex: 0 0 auto;
+          min-height: 40px;
+          padding: 0.45rem 0.9rem;
+        }
+
+        .project-card {
+          border-radius: 16px;
+        }
+
+        .project-info {
+          padding: 1.15rem;
+        }
+
+        .workflow-grid {
+          grid-template-columns: 1fr;
+          gap: 0.9rem;
+        }
+
+        .workflow-card,
+        .why-card {
+          padding: 1.3rem 1.1rem;
+          border-radius: 16px;
+        }
+
+        .contact-box {
+          padding: 1.7rem 1rem;
+        }
+
+        .modal-overlay {
+          align-items: flex-end;
+          padding: 0.45rem;
+        }
+
+        .modal-content,
+        .modal {
+          width: 100%;
+          max-width: 100%;
+          max-height: 92svh;
+          border-radius: 18px 18px 12px 12px;
+        }
+
+        .modal-body {
+          padding: 1.1rem;
+        }
+
+        .mobile-cta-bar {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 1100;
+          display: flex;
+          align-items: center;
+          gap: 0.65rem;
+          padding: 0.55rem 0.75rem calc(0.55rem + env(safe-area-inset-bottom));
+          background: rgba(10, 10, 15, 0.9);
+          border-top: 1px solid rgba(139, 92, 246, 0.16);
+          box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.32);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+        }
+
+        .mobile-cta-bar .btn {
+          flex: 1;
+          min-height: 46px;
+          justify-content: center;
+          padding: 0.65rem 0.85rem;
+          font-size: 0.85rem;
+        }
+
+        .back-to-top {
+          bottom: 78px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .logo {
+          font-size: 1.08rem;
+        }
+        .language-btn {
+          min-width: 66px;
+          padding-inline: 0.5rem;
+        }
+        .hero {
+          padding-top: 6rem;
+        }
+        .hero h1 {
+          font-size: clamp(2rem, 13vw, 2.5rem);
+        }
+        .skills-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .mobile-cta-bar .btn {
+          font-size: 0.78rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="loader-logo">MarkRuble</div>
+      <div class="loader-bar"><span></span></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar">
+      <div class="logo">MarkRuble</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" data-i18n="navHome">الرئيسية</a></li>
+        <li><a href="#about" data-i18n="navAbout">عني</a></li>
+        <li><a href="#services" data-i18n="navServices">الخدمات</a></li>
+        <li><a href="#portfolio" data-i18n="navPortfolio">أعمالي</a></li>
+        <li><a href="#workflow" data-i18n="navWorkflow">طريقة الشغل</a></li>
+        <li><a href="#why-me" data-i18n="navWhyMe">ليه أنا؟</a></li>
+        <li><a href="#contact" data-i18n="navContact">تواصل</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button
+          class="language-btn"
+          id="languageBtn"
+          type="button"
+          aria-label="Change language"
+          title="Change language"
+        >
+          <span class="language-glow" aria-hidden="true"></span>
+          <i class="fas fa-globe language-globe" aria-hidden="true"></i>
+          <span id="languageLabel">EN</span>
+          <i
+            class="fas fa-chevron-down language-chevron"
+            aria-hidden="true"
+          ></i>
+        </button>
+        <div class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+      <div class="hero-bg"></div>
+      <div class="particles" id="particles"></div>
+      <div class="hero-content">
+        <div class="hero-badge" data-i18n="heroBadge">
+          🎬 مونتير | Colorist | Motion Designer
+        </div>
+        <h1><span data-i18n="heroIntro">أنا</span> <span>MarkRuble</span></h1>
+        <p>
+          <span data-i18n="heroText"
+            >بحوّل الأفكار واللقطات لصورة لها حضور وتأثير — بالمونتاج، التلوين
+            والموشن، مع فهم للتسويق والتصميم.</span
+          >
+        </p>
+        <div class="hero-btns">
+          <a href="#portfolio" class="btn btn-primary btn-portfolio"
+            ><i class="fas fa-play"></i>
+            <span data-i18n="heroWork">شوف أعمالي</span></a
+          >
+          <a href="#services" class="btn btn-outline"
+            ><i class="fas fa-tags"></i>
+            <span data-i18n="heroServices">الأسعار والخدمات</span></a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="section-title reveal">
+        <h2>
+          <span data-i18n="aboutTitle">مين</span> <span>MarkRuble</span
+          ><span data-i18n="aboutQuestion">؟</span>
+        </h2>
+        <p data-i18n="aboutSubtitle">بحوّل الفكرة إلى صورة لها حضور وتأثير</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-img reveal">
+          <!-- حط صورتك هنا لو حابب -->
+          <!-- <img src="your-photo.jpg" alt="MarkRuble" style="width:100%;height:100%;object-fit:cover;border-radius:20px"> -->
+          <i class="fas fa-film"></i>
+        </div>
+        <div class="about-text reveal">
+          <h3 data-i18n="aboutRole">مونتير | Colorist | Motion Designer</h3>
+          <p>
+            <span data-i18n="aboutP1"
+              >بشتغل في صناعة الصورة من سنتين، واشتغلت على تطوير أسلوبي في
+              المونتاج والتلوين والموشن بشكل عملي. بستخدم
+              <strong>DaVinci Resolve Studio</strong> للمونتاج والـColor
+              Grading، و<strong>After Effects</strong> للموشن والجرافيكس، عشان
+              يكون عندي تحكم كامل في شكل الصورة وإحساسها.</span
+            >
+          </p>
+          <p>
+            <span data-i18n="aboutP2"
+              >بدأت في مجال الأزياء، وده خلاني أفهم إزاي الصورة تبيع وتتحكم في
+              المشاهد. دلوقتي بختار مشاريعي بعناية، لأن الشغل اللي بطلعه مش
+              بيتساب للصدفة.</span
+            >
+          </p>
+          <p>
+            <span data-i18n="aboutP3"
+              >السرعة والجودة عندي مش اختيار.. ده أسلوب شغل. وعندي خبرة في
+              <strong>البرمجة والتسويق والتصميم</strong> جنب المونتاج
+              والجرافيكس، وده بيساعدني أفهم المشروع من أكتر من زاوية وأحوّل
+              الفيديو لأداة تأثير، مش مجرد مونتاج.</span
+            >
+          </p>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-num">2+</span
+              ><span class="stat-label" data-i18n="statYears">سنين خبرة</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">DR</span
+              ><span class="stat-label">DaVinci Resolve Studio</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">AE</span
+              ><span class="stat-label">After Effects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services + Prices -->
+    <section id="services">
+      <div class="section-title reveal">
+        <h2>
+          <span data-i18n="servicesTitle">الخدمات</span> <span>&</span>
+          <span data-i18n="pricesTitle">الأسعار</span>
+        </h2>
+        <p data-i18n="servicesSubtitle">باكدجز واضحة ومناسبة لكل احتياج</p>
+      </div>
+      <div class="services-grid">
+        <!-- Package 1 (Most Popular) -->
+        <div
+          class="service-card service-reels popular reveal"
+          data-popular="Most Popular"
+        >
+          <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+          <h3 data-i18n="pkgReels">Reels / Shorts</h3>
+          <div class="price">
+            <small data-i18n="startingFrom">Starting at</small> 450
+            <span data-i18n="egp">EGP</span>
+          </div>
+          <ul class="service-features">
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="reelF1"
+                >Short-form video editing (15-60 sec)</span
+              >
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="reelF2">Transitions & trendy edits</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="reelF3">Music + sound effects</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="reelF4">Delivery within 48 hours</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="twoRevisions">2 free revisions</span>
+            </li>
+          </ul>
+          <a
+            href="https://wa.me/201000000000"
+            class="btn btn-primary service-wa-btn"
+            data-wa-service="reels"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><span data-i18n="orderNow">Order Now</span></a
+          >
+        </div>
+
+        <!-- Package 2 -->
+        <div class="service-card service-longform reveal">
+          <div class="service-icon"><i class="fas fa-youtube"></i></div>
+          <h3 data-i18n="pkgLongForm">Long-Form Video</h3>
+          <div class="price">
+            <small data-i18n="startingFrom">Starting at</small> 1200
+            <span data-i18n="egp">EGP</span>
+          </div>
+          <ul class="service-features">
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="longF1"
+                >Full editing for long-form videos (8-15 minutes)</span
+              >
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="longF2"
+                >Graphics & motion based on project needs</span
+              >
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="proColor">Professional color grading</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="revisionNote">2 free revisions</span>
+            </li>
+          </ul>
+          <a
+            href="https://wa.me/201000000000"
+            class="btn btn-outline service-wa-btn"
+            data-wa-service="longform"
+            target="_blank"
+            ><span data-i18n="orderNow">Order Now</span></a
+          >
+        </div>
+
+        <!-- Package 3 -->
+        <div class="service-card service-ads reveal">
+          <div class="service-icon"><i class="fas fa-ad"></i></div>
+          <h3 data-i18n="pkgAd">Commercial Ad</h3>
+          <div class="price">
+            <small data-i18n="startingFrom">Starting at</small> 2000
+            <span data-i18n="egp">EGP</span>
+          </div>
+          <ul class="service-features">
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="adF1">30-60 second commercial</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="adF2">Advanced motion graphics</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="colorGrading"
+                >Professional editing & color grading</span
+              >
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="soundDesign">Full sound design</span>
+            </li>
+            <li>
+              <i class="fas fa-check"></i>
+              <span data-i18n="threeRevisions">3 free revisions</span>
+            </li>
+          </ul>
+          <a
+            href="https://wa.me/201000000000"
+            class="btn btn-outline service-wa-btn"
+            data-wa-service="ad"
+            target="_blank"
+            ><span data-i18n="orderNow">Order Now</span></a
+          >
+        </div>
+      </div>
+      <p
+        id="pricingNote"
+        style="
+          text-align: center;
+          margin-top: 2.5rem;
+          color: var(--text-muted);
+          font-size: 0.95rem;
+        "
+        class="reveal"
+      >
+        <span data-i18n="pricingNote"
+          >الأسعار تقريبية وبتتغير حسب تعقيد الشغل. كلمني عشان نحدد السعر
+          النهائي حسب مشروعك.</span
+        >
+      </p>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+      <div class="section-title reveal">
+        <h2>
+          <span data-i18n="skillsTitle">المهارات</span> <span>&</span>
+          <span data-i18n="toolsTitle">الأدوات</span>
+        </h2>
+        <p data-i18n="skillsSubtitle">الأدوات اللي بشتغل بيها كل يوم</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-film"></i></div>
+          <h4>DaVinci Resolve Studio</h4>
+          <p data-i18n="davinciEditDesc">مونتاج وتلوين احترافي</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-magic"></i></div>
+          <h4>After Effects</h4>
+          <p data-i18n="aeDesc">موشن جرافيكس</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-pen-nib"></i></div>
+          <h4 data-i18n="designSkill">Design</h4>
+          <p data-i18n="designDesc">تصميم بصري وجرافيكس</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-bullhorn"></i></div>
+          <h4 data-i18n="marketingSkill">Marketing</h4>
+          <p data-i18n="marketingDesc">تسويق وفهم للمحتوى والجمهور</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-code"></i></div>
+          <h4 data-i18n="programmingSkill">Programming</h4>
+          <p data-i18n="programmingDesc">برمجة وخلفية تقنية</p>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+          <h4>Reels & Shorts</h4>
+          <p data-i18n="reelsDesc">محتوى قصير</p>
+        </div>
+      </div>
+    </section>
+
+    <button
+      class="back-to-top"
+      id="backToTop"
+      type="button"
+      aria-label="Back to top"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Portfolio -->
+    <section id="portfolio">
+      <div class="section-title reveal">
+        <div class="section-kicker" data-i18n="portfolioKicker">
+          SELECTED WORK
+        </div>
+        <h2 class="portfolio-heading" data-i18n="portfolioTitle">
+          أحدث <span class="title-shimmer">أعمالي</span>
+        </h2>
+        <p data-i18n="portfolioSubtitle">شوية من الشغل اللي عملته مؤخراً</p>
+      </div>
+
+      <div class="filter-btns reveal">
+        <button
+          class="filter-btn active"
+          data-filter="all"
+          data-i18n="filterAll"
+        >
+          الكل
+        </button>
+        <button class="filter-btn" data-filter="reels" data-i18n="filterReels">
+          ريلز
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="longform"
+          data-i18n="filterLongForm"
+        >
+          Long-Form
+        </button>
+        <button class="filter-btn" data-filter="ads" data-i18n="filterAds">
+          إعلانات
+        </button>
+      </div>
+
+      <div class="portfolio-grid" id="portfolioGrid">
+        <!-- مشروع 1 -->
+        <div
+          class="project-card reveal"
+          data-category="ads"
+          onclick="openModal(0)"
+        >
+          <div class="project-img">
+            <!-- حط صورة هنا: <img src="project1.jpg" alt=""> -->
+            <i class="fas fa-play-circle"></i>
+            <div class="play-overlay"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="project-info">
+            <h3 data-i18n="card1Title">إعلان تجاري - براند ملابس</h3>
+            <p data-i18n="card1Desc">مونتاج سريع وإيقاع عالي مع موشن جرافيكس</p>
+            <div class="project-tags">
+              <span class="tag">DaVinci Resolve Studio</span
+              ><span class="tag">After Effects</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- مشروع 2 -->
+        <div
+          class="project-card reveal"
+          data-category="longform"
+          onclick="openModal(1)"
+        >
+          <div class="project-img">
+            <i class="fas fa-play-circle"></i>
+            <div class="play-overlay"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="project-info">
+            <h3 data-i18n="card2Title">Long-Form - قناة تقنية</h3>
+            <p data-i18n="card2Desc">
+              مونتاج فيديو طويل مع جرافيكس وانتقالات ناعمة وتلوين احترافي
+            </p>
+            <div class="project-tags">
+              <span class="tag">DaVinci</span
+              ><span class="tag">Color Grading</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- مشروع 3 -->
+        <div
+          class="project-card reveal"
+          data-category="reels"
+          onclick="openModal(2)"
+        >
+          <div class="project-img">
+            <i class="fas fa-play-circle"></i>
+            <div class="play-overlay"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="project-info">
+            <h3 data-i18n="card3Title">ريلز إنستجرام - مطعم</h3>
+            <p data-i18n="card3Desc">فيديوهات قصيرة بتجيب تفاعل عالي</p>
+            <div class="project-tags">
+              <span class="tag">Reels</span><span class="tag">Trendy</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- مشروع 4 -->
+        <div
+          class="project-card reveal"
+          data-category="longform"
+          onclick="openModal(3)"
+        >
+          <div class="project-img">
+            <i class="fas fa-play-circle"></i>
+            <div class="play-overlay"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="project-info">
+            <h3 data-i18n="card4Title">Long-Form / Storytelling - دراما</h3>
+            <p data-i18n="card4Desc">سرد قصصي وتلوين احترافي</p>
+            <div class="project-tags">
+              <span class="tag">Long-Form</span
+              ><span class="tag">Color Grading</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow -->
+    <section id="workflow">
+      <div class="section-title reveal">
+        <h2 data-i18n="workflowTitle">طريقة <span>الشغل</span></h2>
+        <p data-i18n="workflowSubtitle">
+          عملية واضحة من أول الفكرة لحد التسليم النهائي
+        </p>
+      </div>
+      <div class="workflow-grid">
+        <div class="workflow-card reveal">
+          <span class="workflow-number">01</span><i class="fas fa-comments"></i>
+          <h3 data-i18n="step1Title">Brief</h3>
+          <p data-i18n="step1Desc">
+            أفهم الهدف، الجمهور، والستايل المطلوب قبل ما ألمس التايملاين.
+          </p>
+        </div>
+        <div class="workflow-card reveal">
+          <span class="workflow-number">02</span><i class="fas fa-scissors"></i>
+          <h3 data-i18n="step2Title">Edit</h3>
+          <p data-i18n="step2Desc">
+            أبني الإيقاع، أختار اللقطات، وأضبط القصة عشان الفيديو يفضل ماسك
+            المشاهد.
+          </p>
+        </div>
+        <div class="workflow-card reveal">
+          <span class="workflow-number">03</span><i class="fas fa-palette"></i>
+          <h3 data-i18n="step3Title">Color & Motion</h3>
+          <p data-i18n="step3Desc">
+            تلوين، موشن، ساوند ديزاين ولمسات نهائية تخدم الإحساس والرسالة.
+          </p>
+        </div>
+        <div class="workflow-card reveal">
+          <span class="workflow-number">04</span
+          ><i class="fas fa-paper-plane"></i>
+          <h3 data-i18n="step4Title">Delivery</h3>
+          <p data-i18n="step4Desc">
+            تسليم منظم وجاهز للنشر مع مساحة واضحة للتعديلات المطلوبة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Me -->
+    <section id="why-me">
+      <div class="section-title reveal">
+        <h2 data-i18n="whyTitle">ليه <span>MarkRuble</span>؟</h2>
+        <p data-i18n="whySubtitle">لأن الهدف مش إن الفيديو يبقى شكله حلو وبس</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <i class="fas fa-bolt"></i>
+          <h3 data-i18n="why1Title">سرعة بدون تهاون</h3>
+          <p data-i18n="why1Desc">
+            سرعة التنفيذ عندي جزء من طريقة الشغل، من غير ما أضحي بالتفاصيل
+            المهمة.
+          </p>
+        </div>
+        <div class="why-card reveal">
+          <i class="fas fa-eye"></i>
+          <h3 data-i18n="why2Title">تحكم كامل في الصورة</h3>
+          <p data-i18n="why2Desc">
+            من الـEdit للـColor والـMotion، كل عنصر له دور في الإحساس النهائي.
+          </p>
+        </div>
+        <div class="why-card reveal">
+          <i class="fas fa-bullseye"></i>
+          <h3 data-i18n="why3Title">فيديو له هدف</h3>
+          <p data-i18n="why3Desc">
+            فهم التسويق والتصميم يخليني أبص للفيديو كأداة تأثير، مش مجرد ترتيب
+            لقطات.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="section-title reveal">
+        <h2 data-i18n="contactTitle">يلا <span>نشتغل</span> سوا</h2>
+        <p data-i18n="contactSubtitle">عندك مشروع؟ ابعتلي رسالة</p>
+      </div>
+      <div class="contact-box reveal">
+        <h3 data-i18n="contactReady">جاهز نبدأ؟</h3>
+        <p data-i18n="contactText">
+          ابعتلي على الواتساب أو أي وسيلة تانية وهرد عليك في أسرع وقت
+        </p>
+        <div class="contact-links">
+          <a
+            href="https://wa.me/201000000000?text=مرحباً MarkRuble، شفت موقعك وعايز أتكلم معاك عن مشروع"
+            class="contact-link"
+            title="واتساب"
+            target="_blank"
+            ><i class="fab fa-whatsapp"></i
+          ></a>
+          <a
+            href="mailto:markruble@email.com"
+            class="contact-link"
+            title="إيميل"
+            ><i class="fas fa-envelope"></i
+          ></a>
+          <a href="#" class="contact-link" title="إنستجرام"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a href="#" class="contact-link" title="يوتيوب"
+            ><i class="fab fa-youtube"></i
+          ></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="mobile-cta-bar" aria-label="Mobile contact actions">
+      <a
+        href="https://wa.me/201000000000?text=Hello%20MarkRuble%2C%20I%20saw%20your%20portfolio%20and%20I%27d%20like%20to%20discuss%20a%20project."
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener"
+        ><i class="fab fa-whatsapp"></i
+        ><span data-i18n="mobileCtaWhatsapp">WhatsApp</span></a
+      >
+      <a href="#portfolio" class="btn btn-outline"
+        ><i class="fas fa-play"></i
+        ><span data-i18n="mobileCtaWork">View Work</span></a
+      >
+    </div>
+
+    <footer>
+      <p id="footerText">© 2026 MarkRuble — All Rights Reserved</p>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a
+      href="https://wa.me/201000000000?text=مرحباً MarkRuble، شفت موقعك وعايز أتكلم معاك عن مشروع"
+      class="whatsapp-float"
+      target="_blank"
+      title="تواصل على الواتساب"
+    >
+      <i class="fab fa-whatsapp"></i>
+      <span class="whatsapp-tooltip" data-i18n="whatsappTooltip"
+        >كلمني على الواتساب</span
+      >
+    </a>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-video" id="modalVideo">
+          <i class="fas fa-play-circle"></i>
+          <!-- هنا تحط iframe يوتيوب أو فيديو:
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+        --></div>
+        <div class="modal-body">
+          <h2 id="modalTitle">عنوان المشروع</h2>
+          <div class="modal-tags" id="modalTags"></div>
+          <p id="modalDesc">وصف المشروع...</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // بيانات المشاريع (عدلها حسب شغلك)
+      const projects = [
+        {
+          titleAr: "إعلان تجاري - براند ملابس",
+          titleEn: "Commercial Ad - Clothing Brand",
+          descAr:
+            "مونتاج سريع وإيقاع عالي مع موشن جرافيكس احترافي. تم استخدام DaVinci Resolve Studio و After Effects للترانزيشنز والتكست أنيميشن.",
+          descEn:
+            "Fast-paced commercial edit with professional motion graphics, transitions, and text animation using DaVinci Resolve Studio and After Effects.",
+          tags: ["DaVinci Resolve Studio", "After Effects", "Motion"],
+        },
+        {
+          titleAr: "فيديو يوتيوب - قناة تقنية",
+          titleEn: "Long-Form - Tech Channel",
+          descAr:
+            "مونتاج طويل مع جرافيكس وانتقالات ناعمة وتلوين احترافي باستخدام DaVinci Resolve.",
+          descEn:
+            "Long-form video editing with graphics, smooth transitions, and professional color grading using DaVinci Resolve.",
+          tags: ["DaVinci", "Color Grading", "YouTube"],
+        },
+        {
+          titleAr: "ريلز إنستجرام - مطعم",
+          titleEn: "Instagram Reels - Restaurant",
+          descAr:
+            "فيديوهات قصيرة بتجيب تفاعل عالي، مونتاج ترندي مع إيموجيز وتأثيرات حديثة.",
+          descEn:
+            "Short-form videos designed for engagement, with trendy editing, emojis, and modern effects.",
+          tags: ["Reels", "Trendy", "Instagram"],
+        },
+        {
+          titleAr: "فيلم قصير - دراما",
+          titleEn: "Short Film - Drama",
+          descAr: "سرد قصصي وتلوين احترافي كامل مع ساوند ديزاين دقيق.",
+          descEn:
+            "Story-driven short film editing with professional color grading and detailed sound design.",
+          tags: ["Color Grading", "Story", "Color"],
+        },
+      ];
+
+      // ================= LANGUAGE SYSTEM =================
+      const translations = {
+        ar: {
+          pageTitle: "MarkRuble | Video Editor • Colorist • Motion Designer",
+          metaDescription:
+            "MarkRuble - مونتير، Colorist وMotion Designer. مونتاج وتلوين وموشن جرافيكس بخلفية في التسويق والتصميم والبرمجة.",
+          navHome: "الرئيسية",
+          navAbout: "عني",
+          navServices: "الخدمات",
+          navPortfolio: "أعمالي",
+          navWorkflow: "طريقة الشغل",
+          navWhyMe: "ليه أنا؟",
+          navContact: "تواصل",
+          heroBadge: "🎬 مونتير | Colorist | Motion Designer",
+          heroIntro: "أنا",
+          heroText:
+            "بحوّل الأفكار واللقطات لصورة لها حضور وتأثير — بالمونتاج، التلوين والموشن، مع فهم للتسويق والتصميم.",
+          heroWork: "شوف أعمالي",
+          heroServices: "الأسعار والخدمات",
+          aboutTitle: "مين",
+          aboutQuestion: "؟",
+          aboutSubtitle: "بحوّل الفكرة إلى صورة لها حضور وتأثير",
+          aboutRole: "مونتير | Colorist | Motion Designer",
+          aboutP1:
+            "بشتغل في صناعة الصورة من سنتين، واشتغلت على تطوير أسلوبي في المونتاج والتلوين والموشن بشكل عملي. بستخدم <strong>DaVinci Resolve Studio</strong> للمونتاج والـColor Grading، و<strong>After Effects</strong> للموشن والجرافيكس، عشان يكون عندي تحكم كامل في شكل الصورة وإحساسها.",
+          aboutP2:
+            "بدأت في مجال الأزياء، وده خلاني أفهم إزاي الصورة تبيع وتتحكم في المشاهد. دلوقتي بختار مشاريعي بعناية، لأن الشغل اللي بطلعه مش بيتساب للصدفة.",
+          aboutP3:
+            "السرعة والجودة عندي مش اختيار.. ده أسلوب شغل. وعندي خبرة في <strong>البرمجة والتسويق والتصميم</strong> جنب المونتاج والجرافيكس، وده بيساعدني أفهم المشروع من أكتر من زاوية وأحوّل الفيديو لأداة تأثير، مش مجرد مونتاج.",
+          statProjects: "مشروع",
+          statYears: "سنين خبرة",
+          statSatisfaction: "رضا العملاء",
+          servicesTitle: "الخدمات",
+          pricesTitle: "الأسعار",
+          servicesSubtitle: "باكدجز واضحة ومناسبة لكل احتياج",
+          waServiceReels: "ريلز / شورتس",
+          waServiceLongForm: "Long-Form / فيديو طويل",
+          waServiceAd: "إعلان تجاري",
+          waLeadMessage:
+            "مرحباً MarkRuble 👋\nشفت البورتفوليو وعايز أبدأ معاك.\nالخدمة اللي اخترتها: {service}\nممكن تبعتلي تفاصيل مشروعك عشان أحدد لك أنسب تنفيذ ومدة وسعر؟\n\nنوع المحتوى: \nعدد الفيديوهات / المدة: \nالموعد المطلوب: \n\nمتحمس نبدأ ونطلع شغل قوي مع بعض.",
+          pkgReels: "ريلز / شورتس",
+          egp: "ج.م",
+          reelF1: "مونتاج فيديو قصير (15-60 ثانية)",
+          reelF2: "ترانزيشنز وترند إيديتس",
+          reelF3: "موسيقى + ساوند إفكتس",
+          reelF4: "تسليم خلال 48 ساعة",
+          twoRevisions: "تعديلين مجاناً",
+          orderNow: "اطلب دلوقتي",
+          pkgLongForm: "Long-Form / فيديو طويل",
+          startingFrom: "يبدأ من",
+          longF1: "مونتاج كامل للفيديوهات الطويلة (8-15 دقيقة)",
+          longF2: "جرافيكس وMotion حسب احتياج المشروع",
+          proColor: "تلوين احترافي",
+          revisionNote: "تعديلين مجاناً",
+          pkgAd: "إعلان تجاري",
+          adF1: "إعلان 30-60 ثانية",
+          adF2: "موشن جرافيكس متقدم",
+          colorGrading: "مونتاج وتلوين احترافي",
+          soundDesign: "ساوند ديزاين كامل",
+          threeRevisions: "3 تعديلات مجاناً",
+          pricingNote:
+            "الأسعار تقريبية وبتتغير حسب تعقيد الشغل. كلمني عشان نحدد السعر النهائي حسب مشروعك.",
+          skillsTitle: "المهارات",
+          toolsTitle: "الأدوات",
+          skillsSubtitle: "الأدوات اللي بشتغل بيها كل يوم",
+          davinciEditDesc: "مونتاج + Color Grading",
+          aeDesc: "موشن جرافيكس",
+          davinciDesc: "مونتاج وتلوين احترافي",
+          soundDesc: "تصميم صوتي",
+          designSkill: "التصميم",
+          designDesc: "تصميم بصري وجرافيكس",
+          marketingSkill: "التسويق",
+          marketingDesc: "تسويق وفهم للمحتوى والجمهور",
+          programmingSkill: "البرمجة",
+          programmingDesc: "برمجة وخلفية تقنية",
+          reelsDesc: "محتوى قصير",
+          storyDesc: "سرد قصصي",
+          portfolioKicker: "أعمال مختارة",
+          portfolioTitle: 'أحدث <span class="title-shimmer">أعمالي</span>',
+          portfolioSubtitle:
+            "شوف مجموعة من الشغل اللي يوضح أسلوبي في المونتاج والتلوين والموشن.",
+          workflowTitle: "طريقة <span>الشغل</span>",
+          workflowSubtitle: "عملية واضحة من أول الفكرة لحد التسليم النهائي",
+          step1Title: "Brief",
+          step1Desc:
+            "أفهم الهدف، الجمهور، والستايل المطلوب قبل ما ألمس التايملاين.",
+          step2Title: "Edit",
+          step2Desc:
+            "أبني الإيقاع، أختار اللقطات، وأضبط القصة عشان الفيديو يفضل ماسك المشاهد.",
+          step3Title: "Color & Motion",
+          step3Desc:
+            "تلوين، موشن، ساوند ديزاين ولمسات نهائية تخدم الإحساس والرسالة.",
+          step4Title: "Delivery",
+          step4Desc:
+            "تسليم منظم وجاهز للنشر مع مساحة واضحة للتعديلات المطلوبة.",
+          whyTitle: "ليه <span>MarkRuble</span>؟",
+          whySubtitle: "لأن الهدف مش إن الفيديو يبقى شكله حلو وبس",
+          why1Title: "سرعة بدون تهاون",
+          why1Desc:
+            "سرعة التنفيذ عندي جزء من طريقة الشغل، من غير ما أضحي بالتفاصيل المهمة.",
+          why2Title: "تحكم كامل في الصورة",
+          why2Desc:
+            "من الـEdit للـColor والـMotion، كل عنصر له دور في الإحساس النهائي.",
+          why3Title: "فيديو له هدف",
+          why3Desc:
+            "فهم التسويق والتصميم يخليني أبص للفيديو كأداة تأثير، مش مجرد ترتيب لقطات.",
+          filterAll: "الكل",
+          filterReels: "ريلز / شورتس",
+          filterLongForm: "Long-Form",
+          filterAds: "إعلانات",
+          card1Title: "إعلان تجاري - براند ملابس",
+          card1Desc: "مونتاج سريع وإيقاع عالي مع موشن جرافيكس",
+          card2Title: "Long-Form - Tech Channel",
+          card2Desc:
+            "Long-form editing with graphics, smooth transitions, and professional color grading",
+          card3Title: "ريلز إنستجرام - مطعم",
+          card3Desc: "فيديوهات قصيرة بتجيب تفاعل عالي",
+          card4Title: "Long-Form / Storytelling - Drama",
+          card4Desc: "Story-driven editing with professional color grading",
+          testimonialsTitle: "آراء <span>العملاء</span>",
+          testimonialsSubtitle: "الناس اللي اشتغلت معاها قالت إيه",
+          contactTitle: "خلينا <span>نشتغل</span> سوا",
+          contactSubtitle: "عندك مشروع أو فكرة؟ خلينا نتكلم",
+          contactReady: "جاهز نبدأ؟",
+          contactText:
+            "ابعتلي على الواتساب أو أي وسيلة تانية وهرد عليك في أسرع وقت",
+          whatsappTooltip: "كلمني على الواتساب",
+          footer: "© 2026 MarkRuble — All Rights Reserved",
+          popular: "الأكثر طلباً",
+        },
+        en: {
+          pageTitle: "MarkRuble | Video Editor • Colorist • Motion Designer",
+          metaDescription:
+            "MarkRuble - Video Editor, Colorist and Motion Designer. Editing, color grading and motion backed by marketing, design and programming experience.",
+          navHome: "Home",
+          navAbout: "About",
+          navServices: "Services",
+          navPortfolio: "Portfolio",
+          navWorkflow: "Workflow",
+          navWhyMe: "Why Me?",
+          navContact: "Contact",
+          heroBadge: "🎬 Video Editor | Colorist | Motion Designer",
+          heroIntro: "I'm",
+          heroText:
+            "I turn ideas and footage into visuals with presence and purpose — through editing, color and motion, backed by marketing and design thinking.",
+          heroWork: "View My Work",
+          heroServices: "Services & Pricing",
+          aboutTitle: "Who is",
+          aboutQuestion: "?",
+          aboutSubtitle: "I shape the image through editing, color and motion",
+          aboutRole: "Video Editor | Colorist | Motion Designer",
+          aboutP1:
+            "I've been working in visual production for two years, building hands-on experience across editing, color and motion. I use <strong>DaVinci Resolve Studio</strong> for editing and color grading, and <strong>After Effects</strong> for motion and graphics — giving me full control over the visual result.",
+          aboutP2:
+            "I started in fashion, which taught me how visuals can sell and control attention. Today, I choose projects carefully because the work I deliver is never left to chance.",
+          aboutP3:
+            "Speed and quality are not a trade-off for me — they are part of the workflow. With experience in <strong>programming, marketing and design</strong> alongside editing and graphics, I understand the project from more than one angle and build video as a tool for impact — not just editing.",
+          statProjects: "Projects",
+          statYears: "Years Experience",
+          statSatisfaction: "Client Satisfaction",
+          servicesTitle: "Services",
+          pricesTitle: "Pricing",
+          servicesSubtitle: "Clear packages for different needs",
+          waServiceReels: "Reels / Shorts",
+          waServiceLongForm: "Long-Form Video",
+          waServiceAd: "Commercial Ad",
+          waLeadMessage:
+            "Hi MarkRuble 👋\nI checked your portfolio and I'd like to work with you.\nThe service I selected: {service}\nCould you send me your project details so I can recommend the right execution, turnaround time, and price?\n\nContent type: \nVideo count / duration: \nDeadline: \n\nLooking forward to creating something strong together.",
+          pkgReels: "Reels / Shorts",
+          egp: "EGP",
+          reelF1: "Short-form video editing (15-60 sec)",
+          reelF2: "Transitions & trendy edits",
+          reelF3: "Music + sound effects",
+          reelF4: "Delivery within 48 hours",
+          twoRevisions: "2 free revisions",
+          orderNow: "Order Now",
+          pkgLongForm: "Long-Form Video",
+          startingFrom: "Starting at",
+          ytF1: "Full editing (8-15 minutes)",
+          ytF2: "Graphics & simple motion",
+          proColor: "Professional color grading",
+          thumbnail: "Thumbnail (optional)",
+          pkgAd: "Commercial Ad",
+          adF1: "30-60 second ad",
+          adF2: "Advanced motion graphics",
+          colorGrading: "Professional color grading",
+          soundDesign: "Full sound design",
+          threeRevisions: "3 free revisions",
+          pricingNote:
+            "Prices are approximate and may vary depending on project complexity. Contact me for a final quote.",
+          skillsTitle: "Skills",
+          toolsTitle: "Tools",
+          skillsSubtitle: "The tools I work with every day",
+          davinciEditDesc: "Editing + Color Grading",
+          aeDesc: "Motion graphics",
+          davinciDesc: "Professional editing & color grading",
+          soundDesc: "Sound design",
+          designSkill: "Design",
+          designDesc: "Visual design & graphics",
+          marketingSkill: "Marketing",
+          marketingDesc: "Marketing, content and audience thinking",
+          programmingSkill: "Programming",
+          programmingDesc: "Programming & technical background",
+          reelsDesc: "Short-form content",
+          storyDesc: "Storytelling",
+          portfolioKicker: "SELECTED WORK",
+          portfolioTitle: 'Latest <span class="title-shimmer">Work</span>',
+          portfolioSubtitle:
+            "A focused selection that shows my approach to editing, color and motion.",
+          workflowTitle: "My <span>Workflow</span>",
+          workflowSubtitle:
+            "A clear process from the first brief to final delivery",
+          step1Title: "Brief",
+          step1Desc:
+            "I understand the goal, audience and visual direction before touching the timeline.",
+          step2Title: "Edit",
+          step2Desc:
+            "I build the pacing, select the right shots and shape the story to hold attention.",
+          step3Title: "Color & Motion",
+          step3Desc:
+            "Color grading, motion, sound design and finishing touches built around the intended feeling.",
+          step4Title: "Delivery",
+          step4Desc:
+            "A clean, publish-ready delivery with a clear revision stage when needed.",
+          whyTitle: "Why <span>MarkRuble</span>?",
+          whySubtitle:
+            "Because the goal is bigger than making a video look good",
+          why1Title: "Fast without cutting corners",
+          why1Desc:
+            "Speed is part of my workflow without sacrificing the details that matter.",
+          why2Title: "Full visual control",
+          why2Desc:
+            "From editing to color and motion, every element has a role in the final feeling.",
+          why3Title: "Video with a purpose",
+          why3Desc:
+            "My understanding of marketing and design helps me treat video as a tool for influence, not just a sequence of cuts.",
+          filterAll: "All",
+          filterReels: "Reels / Shorts",
+          filterLongForm: "Long-Form",
+          filterAds: "Ads",
+          card1Title: "Commercial Ad - Clothing Brand",
+          card1Desc: "Fast-paced editing with high-energy motion graphics",
+          card2Title: "Long-Form - Tech Channel",
+          card2Desc: "Long-form editing with graphics and smooth transitions",
+          card3Title: "Instagram Reels - Restaurant",
+          card3Desc: "Short-form videos designed for high engagement",
+          card4Title: "Long-Form / Storytelling - Drama",
+          card4Desc: "Story-driven editing with professional color grading",
+          testimonialsTitle: "Client <span>Testimonials</span>",
+          testimonialsSubtitle: "What clients I've worked with have to say",
+          contactTitle: "Let's <span>Work</span> Together",
+          contactSubtitle: "Have a project or an idea? Let's talk",
+          contactReady: "Ready to start?",
+          contactText:
+            "Message me on WhatsApp or any other channel and I'll get back to you as soon as possible.",
+          whatsappTooltip: "Chat with me on WhatsApp",
+          footer: "© 2026 MarkRuble — All Rights Reserved",
+          popular: "Most Popular",
+          mobileCtaWhatsapp: "WhatsApp",
+          mobileCtaWork: "View Work",
+        },
+      };
+
+      function updateServiceWhatsAppLinks(lang) {
+        const t = translations[lang] || translations.en;
+        const services = {
+          reels: t.waServiceReels,
+          longform: t.waServiceLongForm,
+          ad: t.waServiceAd,
+        };
+        document
+          .querySelectorAll(".service-wa-btn[data-wa-service]")
+          .forEach((link) => {
+            const serviceName =
+              services[link.dataset.waService] || link.dataset.waService;
+            const message = t.waLeadMessage.replace("{service}", serviceName);
+            link.href = `https://wa.me/201000000000?text=${encodeURIComponent(message)}`;
+          });
+      }
+
+      function setLanguage(lang, save = true) {
+        lang = lang === "en" ? "en" : "ar";
+        const t = translations[lang];
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.getElementById("pageTitle").textContent = t.pageTitle;
+        document
+          .getElementById("metaDescription")
+          .setAttribute("content", t.metaDescription);
+        document.getElementById("languageLabel").textContent =
+          lang === "ar" ? "EN" : "AR";
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        updateServiceWhatsAppLinks(lang);
+        document.getElementById("footerText").textContent = t.footer;
+        document
+          .querySelectorAll(".service-card.service-reels")
+          .forEach((card) => (card.dataset.popular = t.popular));
+
+        // Update WhatsApp messages according to language.
+        const waText =
+          lang === "en"
+            ? "Hello MarkRuble, I saw your portfolio and I'd like to discuss a project."
+            : "مرحباً MarkRuble، شفت موقعك وعايز أتكلم معاك عن مشروع";
+        document.querySelectorAll('a[href^="https://wa.me/"]').forEach((a) => {
+          a.title =
+            lang === "en" ? "Contact on WhatsApp" : "تواصل على الواتساب";
+          const base = a.href.split("?")[0];
+          a.href = `${base}?text=${encodeURIComponent(waText)}`;
+        });
+
+        // Update open modal if needed.
+        const modal = document.getElementById("modal");
+        if (modal.classList.contains("active")) {
+          const index = Number(modal.dataset.projectIndex);
+          if (!Number.isNaN(index)) openModal(index);
+        }
+        if (save) localStorage.setItem("markrubleLanguage_v4", lang);
+      }
+
+      function detectLanguage() {
+        // English is the default on the first visit. Once the visitor manually
+        // switches language, keep that preference for future visits.
+        const saved = localStorage.getItem("markrubleLanguage_v4");
+        if (saved === "ar" || saved === "en") return saved;
+        return "en";
+      }
+
+      document.getElementById("languageBtn").addEventListener("click", () => {
+        const next = document.documentElement.lang === "ar" ? "en" : "ar";
+        setLanguage(next);
+      });
+
+      setLanguage(detectLanguage(), false);
+
+      // Preloader
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("preloader").classList.add("hide");
+        }, 2000);
+      });
+
+      // Particles
+      const particlesContainer = document.getElementById("particles");
+      const particleCount = window.matchMedia("(max-width: 600px)").matches
+        ? 16
+        : 30;
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        p.style.left = Math.random() * 100 + "%";
+        p.style.animationDelay = Math.random() * 15 + "s";
+        p.style.animationDuration = 10 + Math.random() * 10 + "s";
+        p.style.width = p.style.height = 2 + Math.random() * 4 + "px";
+        particlesContainer.appendChild(p);
+      }
+
+      // Navbar + scroll progress + active section
+      const navbar = document.getElementById("navbar");
+      const scrollProgress = document.getElementById("scrollProgress");
+      const backToTop = document.getElementById("backToTop");
+      const navLinks = [...document.querySelectorAll(".nav-links a")];
+      const sections = navLinks
+        .map((link) => document.querySelector(link.getAttribute("href")))
+        .filter(Boolean);
+
+      function updateScrollUI() {
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const progress = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+        scrollProgress.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        navbar.classList.toggle("scrolled", window.scrollY > 50);
+        backToTop.classList.toggle("show", window.scrollY > 520);
+
+        let currentId = "home";
+        const threshold = 130;
+        sections.forEach((section) => {
+          if (window.scrollY + threshold >= section.offsetTop)
+            currentId = section.id;
+        });
+        navLinks.forEach((link) => {
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") === `#${currentId}`,
+          );
+        });
+      }
+      window.addEventListener("scroll", updateScrollUI, { passive: true });
+      window.addEventListener("resize", updateScrollUI);
+      updateScrollUI();
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          document.getElementById("navLinks").classList.remove("active");
+        });
+      });
+
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      document.getElementById("languageBtn").addEventListener("click", (e) => {
+        const btn = e.currentTarget;
+        btn.classList.remove("switching");
+        void btn.offsetWidth;
+        btn.classList.add("switching");
+        setTimeout(() => btn.classList.remove("switching"), 500);
+      });
+
+      // Mobile menu
+      document.getElementById("menuBtn").addEventListener("click", () => {
+        document.getElementById("navLinks").classList.toggle("active");
+      });
+      document.querySelectorAll(".nav-links a").forEach((link) => {
+        link.addEventListener("click", () =>
+          document.getElementById("navLinks").classList.remove("active"),
+        );
+      });
+
+      // Filter
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const filter = btn.dataset.filter;
+          document.querySelectorAll(".project-card").forEach((card) => {
+            if (filter === "all" || card.dataset.category === filter) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+      // Modal
+      function openModal(index) {
+        const p = projects[index];
+        const currentLang =
+          document.documentElement.lang === "en" ? "en" : "ar";
+        document.getElementById("modalTitle").textContent =
+          currentLang === "en" ? p.titleEn : p.titleAr;
+        document.getElementById("modalDesc").textContent =
+          currentLang === "en" ? p.descEn : p.descAr;
+        document.getElementById("modalTags").innerHTML = p.tags
+          .map((t) => `<span class="tag">${t}</span>`)
+          .join("");
+
+        const videoBox = document.getElementById("modalVideo");
+        if (p.video) {
+          videoBox.innerHTML = `<iframe src="${p.video}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+        } else {
+          videoBox.innerHTML = `<i class="fas fa-play-circle"></i>`;
+        }
+
+        document.getElementById("modal").dataset.projectIndex = index;
+        document.getElementById("modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        document.getElementById("modal").classList.remove("active");
+        document.body.style.overflow = "";
+        document.getElementById("modalVideo").innerHTML =
+          `<i class="fas fa-play-circle"></i>`;
+      }
+
+      document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("modal")) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          const modal = document.getElementById("modal");
+          if (modal.classList.contains("active")) closeModal();
+          document.getElementById("navLinks").classList.remove("active");
+        }
+      });
+
+      // Reveal on scroll
+      const reveals = document.querySelectorAll(".reveal");
+      const revealOnScroll = () => {
+        reveals.forEach((el) => {
+          if (el.getBoundingClientRect().top < window.innerHeight - 80) {
+            el.classList.add("active");
+          }
+        });
+      };
+      window.addEventListener("scroll", revealOnScroll);
+      revealOnScroll();
+    </script>
+  </body>
+</html>
