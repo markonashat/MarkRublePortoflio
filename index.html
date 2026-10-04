@@ -684,7 +684,12 @@
         border-color: rgba(139, 92, 246, 0.35);
       }
       .project-img {
-        height: 210px;
+        --media-ratio: 16 / 9;
+        width: 100%;
+        height: auto;
+        aspect-ratio: var(--media-ratio);
+        min-height: 180px;
+        max-height: 70vh;
         background: linear-gradient(135deg, #1e1b4b, #312e81);
         display: flex;
         align-items: center;
@@ -694,12 +699,24 @@
         position: relative;
         overflow: hidden;
       }
-      .project-img img {
+      .project-img img,
+      .project-img video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
+        background: #050507;
         position: absolute;
         inset: 0;
+        display: block;
+      }
+      .project-img .media-loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 1;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 1.5rem;
       }
       .project-img .play-overlay {
         position: absolute;
@@ -797,20 +814,34 @@
         background: var(--primary);
       }
       .modal-video {
+        --media-ratio: 16 / 9;
         width: 100%;
-        aspect-ratio: 16/9;
+        max-height: min(78vh, 820px);
+        min-height: 220px;
         background: #000;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 4rem;
         color: rgba(255, 255, 255, 0.3);
+        overflow: hidden;
       }
-      .modal-video iframe,
-      .modal-video video {
-        width: 100%;
-        height: 100%;
+      .modal-video iframe {
+        width: min(100%, 1100px);
+        aspect-ratio: var(--media-ratio);
+        height: auto;
+        max-height: 78vh;
         border: none;
+        display: block;
+      }
+      .modal-video video {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 78vh;
+        object-fit: contain;
+        border: none;
+        display: block;
       }
       .modal-body {
         padding: 2rem;
@@ -1688,6 +1719,24 @@
 
       /* Phones */
       @media (max-width: 600px) {
+        .project-img {
+          min-height: 150px;
+          max-height: 76vh;
+        }
+
+        .modal-video {
+          min-height: 180px;
+          max-height: 78vh;
+        }
+
+        .modal-video video {
+          max-height: 74vh;
+        }
+
+        .modal-video iframe {
+          max-height: 74vh;
+        }
+
         nav {
           padding-inline: 1rem;
         }
@@ -2280,6 +2329,180 @@
           font-size: 0.78rem;
         }
       }
+
+      /* ========== PORTFOLIO MANAGER ========== */
+      .admin-panel {
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(4, 4, 8, 0.86);
+        backdrop-filter: blur(14px);
+      }
+      .admin-panel.active {
+        display: flex;
+      }
+      .admin-shell {
+        width: min(760px, 100%);
+        max-height: min(88vh, 900px);
+        overflow: auto;
+        background: linear-gradient(145deg, #12121a, #0d0d14);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 24px;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+        padding: 1.5rem;
+      }
+      .admin-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .admin-head h3 {
+        font-size: 1.25rem;
+      }
+      .admin-close {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+        cursor: pointer;
+        transition: 0.25s ease;
+      }
+      .admin-close:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+      .admin-note {
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        line-height: 1.7;
+        margin-bottom: 1.2rem;
+      }
+      .admin-form {
+        display: grid;
+        gap: 0.85rem;
+      }
+      .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+      }
+      .admin-field {
+        display: grid;
+        gap: 0.35rem;
+      }
+      .admin-field label {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        font-weight: 700;
+      }
+      .admin-field input,
+      .admin-field select,
+      .admin-field textarea {
+        width: 100%;
+        border: 1px solid rgba(139, 92, 246, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 0.8rem 0.9rem;
+        outline: none;
+        font: inherit;
+      }
+      .admin-field textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      .admin-field input:focus,
+      .admin-field select:focus,
+      .admin-field textarea:focus {
+        border-color: rgba(139, 92, 246, 0.7);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      }
+      .admin-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 0.2rem;
+      }
+      .admin-projects {
+        margin-top: 1.3rem;
+        display: grid;
+        gap: 0.65rem;
+      }
+      .admin-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        padding: 0.75rem 0.85rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+      }
+      .admin-item-info {
+        min-width: 0;
+      }
+      .admin-item-info strong {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .admin-item-info span {
+        display: block;
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        margin-top: 0.15rem;
+      }
+      .admin-delete {
+        flex: 0 0 auto;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        background: rgba(239, 68, 68, 0.08);
+        color: #fca5a5;
+        border-radius: 10px;
+        padding: 0.5rem 0.7rem;
+        cursor: pointer;
+      }
+      .admin-empty {
+        color: var(--text-muted);
+        font-size: 0.84rem;
+        padding: 0.5rem 0;
+      }
+      .admin-trigger {
+        position: fixed;
+        inset-inline-end: 18px;
+        bottom: 18px;
+        z-index: 900;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(10, 10, 15, 0.72);
+        color: rgba(255, 255, 255, 0.28);
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+      }
+      body.admin-mode .admin-trigger {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      @media (max-width: 600px) {
+        .admin-shell {
+          padding: 1rem;
+          border-radius: 18px;
+        }
+        .admin-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -2649,89 +2872,7 @@
         </button>
       </div>
 
-      <div class="portfolio-grid" id="portfolioGrid">
-        <!-- مشروع 1 -->
-        <div
-          class="project-card reveal"
-          data-category="ads"
-          onclick="openModal(0)"
-        >
-          <div class="project-img">
-            <!-- حط صورة هنا: <img src="project1.jpg" alt=""> -->
-            <i class="fas fa-play-circle"></i>
-            <div class="play-overlay"><i class="fas fa-play"></i></div>
-          </div>
-          <div class="project-info">
-            <h3 data-i18n="card1Title">إعلان تجاري - براند ملابس</h3>
-            <p data-i18n="card1Desc">مونتاج سريع وإيقاع عالي مع موشن جرافيكس</p>
-            <div class="project-tags">
-              <span class="tag">DaVinci Resolve Studio</span
-              ><span class="tag">After Effects</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- مشروع 2 -->
-        <div
-          class="project-card reveal"
-          data-category="longform"
-          onclick="openModal(1)"
-        >
-          <div class="project-img">
-            <i class="fas fa-play-circle"></i>
-            <div class="play-overlay"><i class="fas fa-play"></i></div>
-          </div>
-          <div class="project-info">
-            <h3 data-i18n="card2Title">Long-Form - قناة تقنية</h3>
-            <p data-i18n="card2Desc">
-              مونتاج فيديو طويل مع جرافيكس وانتقالات ناعمة وتلوين احترافي
-            </p>
-            <div class="project-tags">
-              <span class="tag">DaVinci</span
-              ><span class="tag">Color Grading</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- مشروع 3 -->
-        <div
-          class="project-card reveal"
-          data-category="reels"
-          onclick="openModal(2)"
-        >
-          <div class="project-img">
-            <i class="fas fa-play-circle"></i>
-            <div class="play-overlay"><i class="fas fa-play"></i></div>
-          </div>
-          <div class="project-info">
-            <h3 data-i18n="card3Title">ريلز إنستجرام - مطعم</h3>
-            <p data-i18n="card3Desc">فيديوهات قصيرة بتجيب تفاعل عالي</p>
-            <div class="project-tags">
-              <span class="tag">Reels</span><span class="tag">Trendy</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- مشروع 4 -->
-        <div
-          class="project-card reveal"
-          data-category="longform"
-          onclick="openModal(3)"
-        >
-          <div class="project-img">
-            <i class="fas fa-play-circle"></i>
-            <div class="play-overlay"><i class="fas fa-play"></i></div>
-          </div>
-          <div class="project-info">
-            <h3 data-i18n="card4Title">Long-Form / Storytelling - دراما</h3>
-            <p data-i18n="card4Desc">سرد قصصي وتلوين احترافي</p>
-            <div class="project-tags">
-              <span class="tag">Long-Form</span
-              ><span class="tag">Color Grading</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
     </section>
 
     <!-- Workflow -->
@@ -2876,6 +3017,124 @@
       >
     </a>
 
+    <!-- Portfolio Manager (available with ?admin=1) -->
+    <div class="admin-panel" id="adminPanel" aria-hidden="true">
+      <div
+        class="admin-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Portfolio Manager"
+      >
+        <div class="admin-head">
+          <div>
+            <h3>Portfolio Manager</h3>
+            <p class="admin-note" style="margin: 0">
+              Add a video without editing the HTML. Select the file, category,
+              and project details, then add it to Latest Work.
+            </p>
+          </div>
+          <button
+            class="admin-close"
+            id="adminClose"
+            type="button"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+        <form class="admin-form" id="adminForm">
+          <div class="admin-grid">
+            <div class="admin-field">
+              <label for="adminTitleEn">Title (English)</label>
+              <input
+                id="adminTitleEn"
+                name="titleEn"
+                required
+                placeholder="Instagram Reel — Fashion Brand"
+              />
+            </div>
+            <div class="admin-field">
+              <label for="adminTitleAr">Title (Arabic)</label>
+              <input
+                id="adminTitleAr"
+                name="titleAr"
+                placeholder="ريلز إنستجرام — براند أزياء"
+              />
+            </div>
+          </div>
+          <div class="admin-grid">
+            <div class="admin-field">
+              <label for="adminDescEn">Description (English)</label>
+              <textarea
+                id="adminDescEn"
+                name="descEn"
+                placeholder="Fast-paced short-form edit with motion graphics and color grading."
+              ></textarea>
+            </div>
+            <div class="admin-field">
+              <label for="adminDescAr">Description (Arabic)</label>
+              <textarea
+                id="adminDescAr"
+                name="descAr"
+                placeholder="مونتاج سريع مع موشن جرافيكس وتلوين احترافي."
+              ></textarea>
+            </div>
+          </div>
+          <div class="admin-grid">
+            <div class="admin-field">
+              <label for="adminCategory">Category</label>
+              <select id="adminCategory" name="category">
+                <option value="reels">Reels / Shorts</option>
+                <option value="longform">Long-Form</option>
+                <option value="ads">Commercial Ads</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label for="adminTags">Tags (comma separated)</label>
+              <input
+                id="adminTags"
+                name="tags"
+                placeholder="DaVinci Resolve Studio, After Effects, Color"
+              />
+            </div>
+          </div>
+          <div class="admin-field">
+            <label for="adminVideo">Video file</label>
+            <input
+              id="adminVideo"
+              name="video"
+              type="file"
+              accept="video/*"
+              required
+            />
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">
+              <i class="fas fa-plus"></i> Add to Portfolio
+            </button>
+            <button class="btn btn-outline" type="button" id="adminClearAll">
+              <i class="fas fa-trash"></i> Clear Added Projects
+            </button>
+          </div>
+          <p
+            class="admin-note"
+            id="adminStatus"
+            style="margin: 0.15rem 0 0"
+          ></p>
+        </form>
+        <div class="admin-projects" id="adminProjectsList"></div>
+      </div>
+    </div>
+    <button
+      class="admin-trigger"
+      id="adminTrigger"
+      type="button"
+      title="Portfolio Manager"
+      aria-label="Portfolio Manager"
+    >
+      <i class="fas fa-sliders-h"></i>
+    </button>
+
     <!-- Modal -->
     <div class="modal-overlay" id="modal">
       <div class="modal">
@@ -2899,6 +3158,7 @@
       // بيانات المشاريع (عدلها حسب شغلك)
       const projects = [
         {
+          id: "base-1",
           titleAr: "إعلان تجاري - براند ملابس",
           titleEn: "Commercial Ad - Clothing Brand",
           descAr:
@@ -2906,8 +3166,11 @@
           descEn:
             "Fast-paced commercial edit with professional motion graphics, transitions, and text animation using DaVinci Resolve Studio and After Effects.",
           tags: ["DaVinci Resolve Studio", "After Effects", "Motion"],
+          ratio: "16 / 9",
+          video: "", // مثال: "videos/commercial-ad.mp4"
         },
         {
+          id: "base-2",
           titleAr: "فيديو يوتيوب - قناة تقنية",
           titleEn: "Long-Form - Tech Channel",
           descAr:
@@ -2915,8 +3178,11 @@
           descEn:
             "Long-form video editing with graphics, smooth transitions, and professional color grading using DaVinci Resolve.",
           tags: ["DaVinci", "Color Grading", "YouTube"],
+          ratio: "16 / 9",
+          video: "", // مثال: "videos/long-form.mp4"
         },
         {
+          id: "base-3",
           titleAr: "ريلز إنستجرام - مطعم",
           titleEn: "Instagram Reels - Restaurant",
           descAr:
@@ -2924,14 +3190,19 @@
           descEn:
             "Short-form videos designed for engagement, with trendy editing, emojis, and modern effects.",
           tags: ["Reels", "Trendy", "Instagram"],
+          ratio: "9 / 16",
+          video: "", // مثال: "videos/reel.mp4"
         },
         {
+          id: "base-4",
           titleAr: "فيلم قصير - دراما",
           titleEn: "Short Film - Drama",
           descAr: "سرد قصصي وتلوين احترافي كامل مع ساوند ديزاين دقيق.",
           descEn:
             "Story-driven short film editing with professional color grading and detailed sound design.",
           tags: ["Color Grading", "Story", "Color"],
+          ratio: "16 / 9",
+          video: "", // مثال: "videos/storytelling.mp4"
         },
       ];
 
@@ -3254,13 +3525,13 @@
           const index = Number(modal.dataset.projectIndex);
           if (!Number.isNaN(index)) openModal(index);
         }
-        if (save) localStorage.setItem("markrubleLanguage_v4", lang);
+        if (save) localStorage.setItem("markrubleLanguage_v5", lang);
       }
 
       function detectLanguage() {
         // English is the default on the first visit. Once the visitor manually
         // switches language, keep that preference for future visits.
-        const saved = localStorage.getItem("markrubleLanguage_v4");
+        const saved = localStorage.getItem("markrubleLanguage_v5");
         if (saved === "ar" || saved === "en") return saved;
         return "en";
       }
@@ -3363,33 +3634,425 @@
             .querySelectorAll(".filter-btn")
             .forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
-          const filter = btn.dataset.filter;
-          document.querySelectorAll(".project-card").forEach((card) => {
-            if (filter === "all" || card.dataset.category === filter) {
-              card.style.display = "block";
-            } else {
-              card.style.display = "none";
-            }
-          });
+          applyCurrentProjectFilter();
         });
       });
+
+      // ================= PROJECT RENDERING + MEDIA SIZING =================
+      function esc(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function setMediaRatio(element, width, height, fallback = "16 / 9") {
+        if (!element || !(width > 0) || !(height > 0)) return;
+        element.style.setProperty("--media-ratio", `${width} / ${height}`);
+      }
+
+      function categoryLabel(category, lang = document.documentElement.lang) {
+        const en = {
+          reels: "Reels / Shorts",
+          longform: "Long-Form",
+          ads: "Commercial Ads",
+        };
+        const ar = {
+          reels: "ريلز / شورتس",
+          longform: "Long-Form",
+          ads: "إعلانات تجارية",
+        };
+        return (lang === "ar" ? ar : en)[category] || category;
+      }
+
+      function projectCardMarkup(p, index) {
+        const lang = document.documentElement.lang === "ar" ? "ar" : "en";
+        const title = lang === "ar" ? p.titleAr : p.titleEn;
+        const desc = lang === "ar" ? p.descAr : p.descEn;
+        const titleAr = p.titleAr || p.titleEn;
+        const titleEn = p.titleEn || p.titleAr;
+        const descAr = p.descAr || p.descEn;
+        const descEn = p.descEn || p.descAr;
+        const ratio = p.ratio || (p.category === "reels" ? "9 / 16" : "16 / 9");
+        const tags = (p.tags || [])
+          .map((tag) => `<span class="tag">${esc(tag)}</span>`)
+          .join("");
+        const isAdded = String(p.id || "").startsWith("user-");
+        const media = p.video
+          ? `<video class="project-media-video" muted playsinline preload="metadata" src="${esc(p.video)}"></video><div class="media-loading"><i class="fas fa-spinner fa-spin"></i></div>`
+          : `<i class="fas fa-play-circle" aria-hidden="true"></i>`;
+        return `
+          <div class="project-card reveal ${isAdded ? "user-project-card" : ""}" data-category="${esc(p.category || "ads")}" data-project-index="${index}" data-title-en="${esc(titleEn)}" data-title-ar="${esc(titleAr)}" data-desc-en="${esc(descEn)}" data-desc-ar="${esc(descAr)}" onclick="openModal(${index})">
+            <div class="project-img" style="--media-ratio:${ratio}">
+              ${media}
+              <div class="play-overlay"><i class="fas fa-play"></i></div>
+            </div>
+            <div class="project-info">
+              <h3>${esc(title)}</h3>
+              <p>${esc(desc)}</p>
+              <div class="project-tags">${tags || `<span class="tag">${categoryLabel(p.category, lang)}</span>`}</div>
+            </div>
+          </div>`;
+      }
+
+      function renderPortfolio() {
+        const grid = document.getElementById("portfolioGrid");
+        if (!grid) return;
+        grid.innerHTML = projects.map(projectCardMarkup).join("");
+        projects.forEach((_, index) => bindProjectMedia(index));
+        applyCurrentProjectFilter();
+        requestAnimationFrame(() => {
+          grid
+            .querySelectorAll(".reveal")
+            .forEach((el) => el.classList.add("active"));
+        });
+      }
+
+      function bindProjectMedia(index) {
+        const card = document.querySelector(
+          `.project-card[data-project-index="${index}"]`,
+        );
+        const p = projects[index];
+        if (!card || !p) return;
+        const box = card.querySelector(".project-img");
+        const video = box?.querySelector("video");
+        if (!box || !video) return;
+        const fallbackRatio =
+          p.ratio || (p.category === "reels" ? "9 / 16" : "16 / 9");
+        box.style.setProperty("--media-ratio", fallbackRatio);
+        video.addEventListener(
+          "loadedmetadata",
+          () => {
+            setMediaRatio(
+              box,
+              video.videoWidth,
+              video.videoHeight,
+              fallbackRatio,
+            );
+            box.querySelector(".media-loading")?.remove();
+            p.ratio = `${video.videoWidth} / ${video.videoHeight}`;
+          },
+          { once: true },
+        );
+        video.addEventListener(
+          "error",
+          () => box.querySelector(".media-loading")?.remove(),
+          { once: true },
+        );
+      }
+
+      function applyCurrentProjectFilter() {
+        const active =
+          document.querySelector(".filter-btn.active")?.dataset.filter || "all";
+        document.querySelectorAll(".project-card").forEach((card) => {
+          card.style.display =
+            active === "all" || card.dataset.category === active
+              ? "block"
+              : "none";
+        });
+      }
+
+      // ================= LOCAL PORTFOLIO MANAGER =================
+      const DB_NAME = "MarkRublePortfolioDB";
+      const DB_VERSION = 1;
+      const STORE_NAME = "projects";
+      let objectUrls = [];
+
+      function openProjectDB() {
+        return new Promise((resolve, reject) => {
+          const request = indexedDB.open(DB_NAME, DB_VERSION);
+          request.onupgradeneeded = () => {
+            const db = request.result;
+            if (!db.objectStoreNames.contains(STORE_NAME))
+              db.createObjectStore(STORE_NAME, { keyPath: "id" });
+          };
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+      }
+
+      async function getStoredProjects() {
+        try {
+          const db = await openProjectDB();
+          return await new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, "readonly");
+            const req = tx.objectStore(STORE_NAME).getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+          });
+        } catch (err) {
+          console.warn("Portfolio storage unavailable:", err);
+          return [];
+        }
+      }
+
+      async function putStoredProject(project, videoBlob) {
+        const db = await openProjectDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, "readwrite");
+          tx.objectStore(STORE_NAME).put({ ...project, videoBlob });
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+
+      async function deleteStoredProject(id) {
+        const db = await openProjectDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, "readwrite");
+          tx.objectStore(STORE_NAME).delete(id);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+
+      async function clearStoredProjects() {
+        const db = await openProjectDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, "readwrite");
+          tx.objectStore(STORE_NAME).clear();
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+
+      function showAdminStatus(message, error = false) {
+        const el = document.getElementById("adminStatus");
+        if (!el) return;
+        el.textContent = message;
+        el.style.color = error ? "#fca5a5" : "#a7f3d0";
+      }
+
+      function refreshAdminList() {
+        const list = document.getElementById("adminProjectsList");
+        if (!list) return;
+        const items = projects.filter((p) =>
+          String(p.id || "").startsWith("user-"),
+        );
+        if (!items.length) {
+          list.innerHTML = `<div class="admin-empty">No locally added projects yet.</div>`;
+          return;
+        }
+        list.innerHTML = items
+          .map(
+            (p) => `
+          <div class="admin-item">
+            <div class="admin-item-info">
+              <strong>${esc(p.titleEn || p.titleAr)}</strong>
+              <span>${categoryLabel(p.category, "en")}</span>
+            </div>
+            <button class="admin-delete" type="button" data-delete-project="${esc(p.id)}">Delete</button>
+          </div>`,
+          )
+          .join("");
+        list.querySelectorAll("[data-delete-project]").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.dataset.deleteProject;
+            await deleteStoredProject(id);
+            const index = projects.findIndex((p) => p.id === id);
+            if (index >= 0) {
+              const removed = projects[index];
+              projects.splice(index, 1);
+              if (removed?.video) {
+                try {
+                  URL.revokeObjectURL(removed.video);
+                } catch {}
+                objectUrls = objectUrls.filter((url) => url !== removed.video);
+              }
+            }
+            renderPortfolio();
+            refreshAdminList();
+            showAdminStatus("Project removed.");
+          });
+        });
+      }
+
+      async function loadStoredProjects() {
+        const stored = await getStoredProjects();
+        stored.forEach((item) => {
+          if (!item.videoBlob) return;
+          const url = URL.createObjectURL(item.videoBlob);
+          objectUrls.push(url);
+          projects.push({
+            id: item.id,
+            category: item.category,
+            titleAr: item.titleAr || item.titleEn,
+            titleEn: item.titleEn || item.titleAr,
+            descAr: item.descAr || item.descEn || "",
+            descEn: item.descEn || item.descAr || "",
+            tags: item.tags || [],
+            ratio:
+              item.ratio || (item.category === "reels" ? "9 / 16" : "16 / 9"),
+            video: url,
+            userAdded: true,
+          });
+        });
+        if (stored.length) renderPortfolio();
+        refreshAdminList();
+      }
+
+      async function handleAdminSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const fileInput = document.getElementById("adminVideo");
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        if (!file.type.startsWith("video/"))
+          return showAdminStatus("Please choose a video file.", true);
+        if (file.size > 500 * 1024 * 1024)
+          return showAdminStatus(
+            "For this browser-only manager, keep each video under 500 MB.",
+            true,
+          );
+
+        const id = `user-${Date.now()}`;
+        const titleEn = document.getElementById("adminTitleEn").value.trim();
+        const titleAr =
+          document.getElementById("adminTitleAr").value.trim() || titleEn;
+        const descEn = document.getElementById("adminDescEn").value.trim();
+        const descAr =
+          document.getElementById("adminDescAr").value.trim() || descEn;
+        const category = document.getElementById("adminCategory").value;
+        const tags = document
+          .getElementById("adminTags")
+          .value.split(",")
+          .map((x) => x.trim())
+          .filter(Boolean);
+
+        const previewUrl = URL.createObjectURL(file);
+        objectUrls.push(previewUrl);
+        const project = {
+          id,
+          category,
+          titleEn,
+          titleAr,
+          descEn,
+          descAr,
+          tags,
+          ratio: category === "reels" ? "9 / 16" : "16 / 9",
+          video: previewUrl,
+          userAdded: true,
+        };
+        projects.push(project);
+        renderPortfolio();
+
+        try {
+          await putStoredProject(project, file);
+          showAdminStatus("Added successfully. It is saved in this browser.");
+          form.reset();
+          refreshAdminList();
+        } catch (err) {
+          projects.pop();
+          renderPortfolio();
+          showAdminStatus(
+            "The file could not be saved in this browser. The video was not added.",
+            true,
+          );
+          console.error(err);
+        }
+      }
+
+      function openAdmin() {
+        const panel = document.getElementById("adminPanel");
+        if (!panel) return;
+        panel.classList.add("active");
+        panel.setAttribute("aria-hidden", "false");
+      }
+      function closeAdmin() {
+        const panel = document.getElementById("adminPanel");
+        if (!panel) return;
+        panel.classList.remove("active");
+        panel.setAttribute("aria-hidden", "true");
+      }
+
+      // Open manager with ?admin=1 or Ctrl/Cmd + Shift + A.
+      const adminTrigger = document.getElementById("adminTrigger");
+      if (new URLSearchParams(location.search).get("admin") === "1") {
+        document.body.classList.add("admin-mode");
+        setTimeout(openAdmin, 350);
+      }
+      adminTrigger?.addEventListener("click", openAdmin);
+      document
+        .getElementById("adminClose")
+        ?.addEventListener("click", closeAdmin);
+      document.getElementById("adminPanel")?.addEventListener("click", (e) => {
+        if (e.target.id === "adminPanel") closeAdmin();
+      });
+      document
+        .getElementById("adminForm")
+        ?.addEventListener("submit", handleAdminSubmit);
+      document
+        .getElementById("adminClearAll")
+        ?.addEventListener("click", async () => {
+          if (
+            !confirm(
+              "Delete all locally added portfolio projects from this browser?",
+            )
+          )
+            return;
+          await clearStoredProjects();
+          for (const p of [...projects]) {
+            if (String(p.id || "").startsWith("user-")) {
+              const idx = projects.indexOf(p);
+              if (idx >= 0) projects.splice(idx, 1);
+            }
+          }
+          renderPortfolio();
+          refreshAdminList();
+          showAdminStatus("All locally added projects were removed.");
+        });
+      document.addEventListener("keydown", (e) => {
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          e.shiftKey &&
+          e.key.toLowerCase() === "a"
+        ) {
+          e.preventDefault();
+          openAdmin();
+        }
+      });
+
+      // Initialize project gallery and local uploads.
+      renderPortfolio();
+      loadStoredProjects();
 
       // Modal
       function openModal(index) {
         const p = projects[index];
+        if (!p) return;
         const currentLang =
           document.documentElement.lang === "en" ? "en" : "ar";
         document.getElementById("modalTitle").textContent =
           currentLang === "en" ? p.titleEn : p.titleAr;
         document.getElementById("modalDesc").textContent =
           currentLang === "en" ? p.descEn : p.descAr;
-        document.getElementById("modalTags").innerHTML = p.tags
-          .map((t) => `<span class="tag">${t}</span>`)
+        document.getElementById("modalTags").innerHTML = (p.tags || [])
+          .map((t) => `<span class="tag">${esc(t)}</span>`)
           .join("");
 
         const videoBox = document.getElementById("modalVideo");
+        videoBox.style.setProperty(
+          "--media-ratio",
+          p.ratio || (p.category === "reels" ? "9 / 16" : "16 / 9"),
+        );
         if (p.video) {
-          videoBox.innerHTML = `<iframe src="${p.video}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+          const isEmbed = /youtube\.com|youtu\.be|vimeo\.com/.test(p.video);
+          if (isEmbed) {
+            videoBox.innerHTML = `<iframe src="${esc(p.video)}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+          } else {
+            videoBox.innerHTML = `<video controls playsinline preload="metadata" src="${esc(p.video)}"></video>`;
+            const media = videoBox.querySelector("video");
+            media.addEventListener(
+              "loadedmetadata",
+              () => {
+                setMediaRatio(videoBox, media.videoWidth, media.videoHeight);
+                p.ratio = `${media.videoWidth} / ${media.videoHeight}`;
+              },
+              { once: true },
+            );
+          }
         } else {
           videoBox.innerHTML = `<i class="fas fa-play-circle"></i>`;
         }
@@ -3402,19 +4065,13 @@
       function closeModal() {
         document.getElementById("modal").classList.remove("active");
         document.body.style.overflow = "";
-        document.getElementById("modalVideo").innerHTML =
-          `<i class="fas fa-play-circle"></i>`;
+        const modalVideo = document.getElementById("modalVideo");
+        modalVideo.innerHTML = `<i class="fas fa-play-circle"></i>`;
+        modalVideo.style.setProperty("--media-ratio", "16 / 9");
       }
 
       document.getElementById("modal").addEventListener("click", (e) => {
         if (e.target === document.getElementById("modal")) closeModal();
-      });
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          const modal = document.getElementById("modal");
-          if (modal.classList.contains("active")) closeModal();
-          document.getElementById("navLinks").classList.remove("active");
-        }
       });
 
       // Reveal on scroll
