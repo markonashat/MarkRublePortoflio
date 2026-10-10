@@ -6,10 +6,12 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
-    <title>MarkRuble | Video Editor • Colorist • Motion Designer</title>
+    <title>
+      MarkRuble | Freelance Video Editor, Colorist & Motion Designer
+    </title>
     <meta
       name="description"
-      content="MarkRuble - Video Editor, Colorist and Motion Designer. Editing, color grading and motion graphics backed by marketing and design experience."
+      content="Freelance video editor, colorist and motion designer for Reels, YouTube videos and commercial ads. Watch the showreel, see packages and pricing. DaVinci Resolve Studio and After Effects."
     />
     <meta name="theme-color" content="#0a0a0f" />
     <meta property="og:type" content="website" />
@@ -36,6 +38,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <style>
+      /* TABLE OF CONTENTS
+   1 base (variables, layout, sections)   2 motion & effects   3 hero extras, badge, carousel
+   4 every-corner motion   5 photo spots, counters, transitions   6 3D hero   7 organization pass
+   Later sections override earlier ones. To change something, search its class name and edit the LAST place it appears.
+   Colors: change the variables in :root just below. */
       * {
         margin: 0;
         padding: 0;
@@ -840,7 +847,7 @@
         }
       }
 
-      /* ===== RESTORED + NEW MOTION ===== */
+      /* ===== 2 · MOTION & EFFECTS (loader, hero, glows, cards) ===== */
       .logo,
       .ld-logo {
         background: linear-gradient(135deg, var(--p), var(--a));
@@ -1344,7 +1351,7 @@
         }
       }
 
-      /* ===== INSPIRATION PASS ===== */
+      /* ===== 3 · HERO EXTRAS, BADGE, WORKFLOW CAROUSEL ===== */
       /* hero: ghost wordmark + glass chips */
       .ghost {
         position: absolute;
@@ -1616,7 +1623,7 @@
         transform: scaleX(-1);
       }
 
-      /* ===== MOTION PASS 3: every corner alive ===== */
+      /* ===== 4 · EVERY-CORNER MOTION (grain, cursor, nav, marquee) ===== */
       /* cinematic film grain */
       body::after {
         content: "";
@@ -2000,7 +2007,426 @@
         background-size: 200% 100%;
         animation: sk 4s linear infinite;
       }
+
+      /* ===== 5 · PHOTO SPOTS, COUNTERS, COVERFLOW, TRANSITIONS ===== */
+      /* photo spots */
+      .avi {
+        position: relative;
+        border-radius: 50%;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1e1b4b, #312e81);
+        display: grid;
+        place-items: center;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #ddd6fe;
+      }
+      .avi img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+      .avi.has img {
+        display: block;
+      }
+      .avi.has b {
+        display: none;
+      }
+      .av {
+        position: relative;
+        width: 116px;
+        height: 116px;
+        margin: 0 auto 1.3rem;
+      }
+      .av .avi {
+        position: absolute;
+        inset: 0;
+        box-shadow: 0 0 0 4px var(--bg);
+      }
+      .av .ring {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, var(--p), var(--a), var(--p));
+        animation: spin 4s linear infinite;
+        filter: drop-shadow(0 0 14px rgba(139, 92, 246, 0.6));
+      }
+      .bph {
+        width: 88px;
+        height: 88px;
+        margin: 0.5rem auto 0;
+        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.5);
+      }
+      /* editorial section counters */
+      body {
+        counter-reset: sec;
+      }
+      section:not(.hero) {
+        counter-increment: sec;
+      }
+      .st::before {
+        content: "0" counter(sec) " — 07";
+        display: block;
+        color: var(--a);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        margin-bottom: 0.7rem;
+      }
+      /* thumbnails unveil */
+      .proj.in .thumb {
+        animation: unveil 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards;
+      }
+      @keyframes unveil {
+        from {
+          clip-path: inset(0 0 100% 0);
+        }
+      }
+      /* workflow coverflow + pills */
+      #wf .card {
+        transform: perspective(900px) rotateY(calc(var(--o, 0) * -26deg))
+          scale(calc(1 - var(--o, 0) * var(--o, 0) * 0.08));
+        transition:
+          transform 0.25s ease-out,
+          opacity 0.25s;
+      }
+      #wf .card.in {
+        opacity: calc(1 - var(--o, 0) * var(--o, 0) * 0.4);
+      }
+      #wf .card::before {
+        translate: calc(var(--o, 0) * -26px) 0;
+      }
+      .wfc b {
+        display: inline-block;
+      }
+      .pop {
+        animation: popn 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      @keyframes popn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+      }
+      .pills {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 0.4rem;
+      }
+      .pills button {
+        padding: 0.5rem 1.2rem;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--m);
+        font:
+          600 0.85rem Inter,
+          Cairo,
+          sans-serif;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .pills button:hover {
+        color: var(--t);
+      }
+      .pills button.on {
+        background: var(--p);
+        border-color: var(--p);
+        color: #fff;
+        box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
+      }
+      /* page-transition wipe + side dots */
+      .wipe {
+        position: fixed;
+        inset: 0;
+        z-index: 99990;
+        pointer-events: none;
+        transform: translateY(100%);
+        background: linear-gradient(135deg, var(--pd), var(--p) 50%, var(--a));
+      }
+      .dots {
+        position: fixed;
+        inset-inline-end: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        z-index: 900;
+      }
+      .dots a {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.25);
+        transition: 0.3s;
+      }
+      .dots a.on {
+        background: var(--a);
+        transform: scale(1.5);
+        box-shadow: 0 0 10px var(--a);
+      }
+      @media (max-width: 900px) {
+        .dots {
+          display: none;
+        }
+      }
+
+      /* ===== 6 · 3D HERO + CAROUSEL FIX ===== */
+      #wf {
+        padding-inline: calc(50% - min(39vw, 150px));
+        scroll-padding-inline: calc(50% - min(39vw, 150px));
+      }
+      #gl {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        opacity: 0.75;
+        pointer-events: none;
+      }
+      .hero .in {
+        text-shadow: 0 2px 26px rgba(10, 10, 15, 0.85);
+        transform-style: preserve-3d;
+        transform: perspective(1100px) rotateY(calc(var(--px, 0) * 5deg))
+          rotateX(calc(var(--py, 0) * -4deg));
+        transition: transform 0.4s ease-out;
+      }
+      .hero h1 {
+        transform: translateZ(70px);
+      }
+      .av {
+        transform: translateZ(90px);
+      }
+
+      /* ===== 7 · ORGANIZATION PASS ===== */
+      [hidden] {
+        display: none !important;
+      }
+      /* one content width everywhere */
+      .wrap,
+      .grid,
+      .svc,
+      #sk,
+      #wf,
+      #why,
+      .wfc {
+        max-width: 1160px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 0.9rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2.2rem;
+      }
+      /* color discipline: violet is the brand, amber is the highlight (prices, name, logo) */
+      .st h2 span {
+        background-image: linear-gradient(
+          90deg,
+          #8b5cf6 0%,
+          #c4b5fd 40%,
+          #fff 50%,
+          #c4b5fd 60%,
+          #8b5cf6 100%
+        );
+      }
+      .st::before {
+        color: #a78bfa;
+      }
+      .chip i {
+        color: #c4b5fd;
+      }
+
+      /* ===== 8 · SHOWREEL, PROOF, CASE-STUDY DETAILS ===== */
+      .st::before {
+        content: "0" counter(sec) " — " var(--tot, "08");
+      }
+      .pos {
+        font-size: clamp(1.05rem, 2vw, 1.4rem);
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+        color: #ddd6fe;
+      }
+      .reelbox {
+        position: relative;
+        max-width: 980px;
+        margin: 0 auto;
+        aspect-ratio: 16/9;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        background: linear-gradient(135deg, #1e1b4b, #312e81);
+        box-shadow:
+          0 30px 70px rgba(0, 0, 0, 0.5),
+          0 0 60px rgba(139, 92, 246, 0.15);
+      }
+      .reelbox img,
+      .reelbox video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s;
+      }
+      .reelbox:hover img,
+      .reelbox:hover video {
+        transform: scale(1.04);
+      }
+      .bigplay {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 84px;
+        height: 84px;
+        margin: -42px 0 0 -42px;
+        border-radius: 50%;
+        border: 0;
+        background: linear-gradient(135deg, var(--p), var(--pd));
+        color: #fff;
+        font-size: 1.6rem;
+        cursor: pointer;
+        animation: rp 2.4s infinite;
+      }
+      .reelbox.soon {
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        gap: 0.6rem;
+        cursor: default;
+        color: var(--m);
+        font-weight: 700;
+      }
+      .reelbox.soon i {
+        font-size: 3rem;
+        opacity: 0.35;
+      }
+      .tg {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 1.4rem;
+        max-width: 1160px;
+        margin: 0 auto;
+      }
+      .tq {
+        text-align: start;
+      }
+      .tq p {
+        font-size: 0.98rem;
+        line-height: 1.8;
+        margin: 0.8rem 0 1.2rem;
+        color: var(--t);
+      }
+      .tq small {
+        color: var(--m);
+      }
+      .mi {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.8rem;
+        margin-top: 1rem;
+      }
+      .mi div {
+        padding: 0.7rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .mi b {
+        display: block;
+        font-size: 0.7rem;
+        color: #a78bfa;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .mi span {
+        font-size: 0.9rem;
+      }
+
+      /* ===== 9 · PROJECT COVERS ===== */
+      .thumb::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(10, 10, 15, 0.7),
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .ph .thumb::after {
+        display: none;
+      }
+      .cat {
+        position: absolute;
+        top: 12px;
+        inset-inline-start: 12px;
+        z-index: 2;
+        padding: 0.25rem 0.75rem;
+        border-radius: 99px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: rgba(10, 10, 15, 0.6);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+      .ph .cat {
+        display: none;
+      }
+      .play {
+        z-index: 2;
+        background: transparent;
+      }
+      .play i {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 1.2rem;
+        background: rgba(139, 92, 246, 0.88);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 8px 28px rgba(139, 92, 246, 0.5);
+        transform: scale(0.8);
+        transition: transform 0.3s;
+      }
+      .proj:not(.ph):hover .play i {
+        transform: scale(1);
+      }
+      @media (hover: none) {
+        .proj:not(.ph) .play {
+          opacity: 1;
+        }
+      }
     </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "MarkRuble",
+        "jobTitle": "Video Editor, Colorist and Motion Designer",
+        "knowsAbout": [
+          "Video editing",
+          "Color grading",
+          "Motion graphics",
+          "DaVinci Resolve",
+          "After Effects"
+        ],
+        "sameAs": [
+          "https://www.instagram.com/markrublex",
+          "https://www.youtube.com/@mark_ruble"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="pre">
@@ -2008,6 +2434,7 @@
       <div class="ld-bar"><span></span></div>
     </div>
     <div class="sp" id="sp"></div>
+    <div class="wipe" id="wipe"></div>
     <nav id="nav">
       <a class="logo" href="#home">MarkRuble</a>
       <ul class="links" id="links">
@@ -2044,12 +2471,17 @@
       <div class="chip c2"><i class="fas fa-magic"></i>After Effects</div>
       <div class="chip c3"><i class="fas fa-palette"></i>Color Grading</div>
       <div class="in">
+        <div class="av h-a">
+          <span class="ring"></span>
+          <div class="avi"><img alt="MarkRuble" /><b>MR</b></div>
+        </div>
         <div class="badge-h h-a" data-i="badge">
           🎬 Video Editor | Colorist | Motion Designer
         </div>
         <h1 class="h-b">
           <span data-i="im">I'm</span> <span class="g">MarkRuble</span>
         </h1>
+        <h2 class="pos h-b" data-i="pos"></h2>
         <p data-i="heroP"></p>
         <div class="row h-d">
           <a href="#portfolio" class="btn b1"
@@ -2063,6 +2495,14 @@
         </div>
       </div>
       <div class="scrl"><i></i></div>
+    </section>
+
+    <section class="alt" id="reel">
+      <div class="st rv">
+        <h2 data-i="reelT"></h2>
+        <p data-i="reelS"></p>
+      </div>
+      <div class="reelbox rv" id="reelbox"></div>
     </section>
 
     <div class="marq" aria-hidden="true"><div class="mt" id="mt"></div></div>
@@ -2081,9 +2521,18 @@
         <button class="fb" data-f="ads" data-i="ads">Ads</button>
       </div>
       <div class="grid" id="grid"></div>
-      <div style="text-align: center; margin-top: 2.2rem">
+      <div class="cta-row">
+        <a
+          class="btn b1"
+          data-wa="general"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><i class="fab fa-whatsapp"></i
+          ><span data-i="start">Start a project</span></a
+        >
         <a
           class="btn b2"
+          data-link="youtube"
           href="https://www.youtube.com/@mark_ruble"
           target="_blank"
           rel="noopener noreferrer"
@@ -2104,6 +2553,7 @@
           <div class="strap"></div>
           <div class="badge3d" id="badge">
             <div class="hole"></div>
+            <div class="bph avi"><img alt="MarkRuble" /><b>MR</b></div>
             <div class="bn">MarkRuble</div>
             <div class="br" data-i="aboutRole"></div>
             <div class="bt">
@@ -2126,7 +2576,15 @@
       </div>
     </section>
 
-    <section id="services">
+    <section id="skills">
+      <div class="st rv">
+        <h2 data-i="skT"></h2>
+        <p data-i="skS"></p>
+      </div>
+      <div class="cards" id="sk"></div>
+    </section>
+
+    <section class="alt" id="services">
       <div class="st rv">
         <h2 data-i="servT"></h2>
         <p data-i="servS"></p>
@@ -2188,14 +2646,6 @@
       <p class="note rv" data-i="note"></p>
     </section>
 
-    <section class="alt" id="skills">
-      <div class="st rv">
-        <h2 data-i="skT"></h2>
-        <p data-i="skS"></p>
-      </div>
-      <div class="cards" id="sk"></div>
-    </section>
-
     <section id="workflow">
       <div class="st rv">
         <h2 data-i="flowT"></h2>
@@ -2213,6 +2663,7 @@
         </div>
       </div>
       <div class="cards" id="wf"></div>
+      <div class="pills" id="pills"></div>
     </section>
 
     <section class="alt" id="why">
@@ -2221,6 +2672,14 @@
         <p data-i="whyS"></p>
       </div>
       <div class="cards" id="why"></div>
+    </section>
+
+    <section id="proof" hidden>
+      <div class="st rv">
+        <h2 data-i="testT"></h2>
+        <p data-i="testS"></p>
+      </div>
+      <div class="tg" id="tg"></div>
     </section>
 
     <div class="marq2" aria-hidden="true"><div class="mt2" id="mt2"></div></div>
@@ -2242,6 +2701,7 @@
         >
         <div class="soc">
           <a
+            data-link="instagram"
             href="https://www.instagram.com/markrublex"
             target="_blank"
             rel="noopener noreferrer"
@@ -2249,13 +2709,16 @@
             ><i class="fab fa-instagram"></i
           ></a>
           <a
+            data-link="youtube"
             href="https://www.youtube.com/@mark_ruble"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="YouTube"
             ><i class="fab fa-youtube"></i
           ></a>
-          <!-- Add email when you have one: <a href="mailto:you@domain.com" aria-label="Email"><i class="fas fa-envelope"></i></a> -->
+          <a data-link="email" hidden aria-label="Email"
+            ><i class="fas fa-envelope"></i
+          ></a>
         </div>
       </div>
     </section>
@@ -2356,44 +2819,93 @@
           <h2 id="mt"></h2>
           <div class="tags" id="mg"></div>
           <p id="md"></p>
+          <div class="mi" id="mi"></div>
         </div>
       </div>
     </div>
 
     <script>
-      const WA = "201212043809";
+      /* TABLE OF CONTENTS
+   ✏️ EDIT ME (1) contact/photo/links · ✏️ EDIT ME (2) projects · text (L = translations, D = card content)
+   video helpers · language · filters · modal · nav & scroll · effects (loader, particles, tilt, cursor, 3D) · portfolio manager */
+      /* ================================================================
+   ✏️  EDIT ME (1) — contact, photo and social links
+   ================================================================ */
+      const SITE = {
+        whatsapp: "201212043809", // digits only, with country code
+        photo: "", // e.g. "me.jpg" (square, face centered, 600px+), file next to index.html
+        instagram: "https://www.instagram.com/markrublex",
+        youtube: "https://www.youtube.com/@mark_ruble",
+        email: "", // e.g. "you@domain.com"; the email icon appears automatically
+        showreel: "https://www.youtube.com/watch?v=R6MlUcmOul8", // YouTube/Vimeo link or file path ("videos/reel.mp4") of your best 60-90s reel
+        showreelThumb: "", // optional cover image for the showreel (needed for Vimeo or self-hosted files)
+      };
+      /* ✏️ EDIT ME (3) — client testimonials. Leave empty and the whole section stays hidden.
+   Add only real quotes (with the client's permission). Example:
+   { q: "Fast and exactly what I wanted.", qa: "سريع وبالظبط اللي عايزه.", name: "Client name", role: "Brand / channel" } */
+      const TESTIMONIALS = [
+        {
+          q: "(SAMPLE - replace or delete) Fast delivery and exactly the look we wanted.",
+          qa: "(مثال - غيّره أو امسحه) تسليم سريع وبالظبط الشكل اللي عايزينه.",
+          name: "Sample Client",
+          role: "Replace me",
+        },
+        {
+          q: "(SAMPLE - replace or delete) The color grade made the whole video feel premium.",
+          qa: "(مثال - غيّره أو امسحه) التلوين خلّى الفيديو كله شكله فخم.",
+          name: "Sample Client 2",
+          role: "Replace me",
+        },
+      ];
+      const WA = SITE.whatsapp,
+        PHOTO = SITE.photo;
       const $ = (s) => document.querySelector(s),
         $$ = (s) => [...document.querySelectorAll(s)];
 
-      /* ===== PROJECTS: add yours here =====
+      /* ✏️ EDIT ME (2) — TEST VIDEOS BELOW are free Blender open movies; replace with yours.
+   PROJECTS: add yours here =====
    v: YouTube / Vimeo link, or a file path like "videos/reel.mp4"
    th: optional thumbnail image (needed for Vimeo; self-hosted videos auto-preview)
-   r: aspect ratio, "16 / 9" for horizontal, "9 / 16" for reels */
+   r: aspect ratio, "16 / 9" for horizontal, "9 / 16" for reels
+   OPTIONAL case-study details (shown in the popup): gE/gA = goal (English/Arabic), role, tools, rE/rA = result.
+   Example: gE:"Launch ad for a clothing drop", gA:"إعلان إطلاق كوليكشن", role:"Edit + color + motion", tools:"DaVinci Resolve Studio, After Effects", rE:"Delivered in 3 days", rA:"تسليم في 3 أيام" */
       const P = [
         {
           c: "ads",
           r: "16 / 9",
-          v: "",
+          v: "https://www.youtube.com/watch?v=YE7VzlLtp-4",
           en: "Commercial Ad - Clothing Brand",
           ar: "إعلان تجاري - براند ملابس",
           de: "Fast-paced edit with professional motion graphics and text animation.",
           da: "مونتاج سريع مع موشن جرافيكس احترافي وتكست أنيميشن.",
           tags: ["DaVinci Resolve Studio", "After Effects", "Motion"],
+          gE: "(Test) Launch ad for a clothing drop",
+          gA: "(تجريبي) إعلان إطلاق كوليكشن",
+          role: "Edit + color + motion",
+          tools: "DaVinci Resolve Studio, After Effects",
+          rE: "(Test) Delivered in 3 days",
+          rA: "(تجريبي) تسليم في 3 أيام",
         },
         {
           c: "longform",
           r: "16 / 9",
-          v: "",
+          v: "https://www.youtube.com/watch?v=eRsGyueVLvQ",
           en: "Long-Form - Tech Channel",
           ar: "فيديو يوتيوب - قناة تقنية",
           de: "Long-form edit with graphics, smooth transitions and color grading.",
           da: "مونتاج طويل مع جرافيكس وانتقالات ناعمة وتلوين احترافي.",
           tags: ["DaVinci Resolve", "Color Grading", "YouTube"],
+          gE: "(Test) Keep viewers watching a 12-minute video",
+          gA: "(تجريبي) الحفاظ على انتباه المشاهد في فيديو 12 دقيقة",
+          role: "Full edit + color grade",
+          tools: "DaVinci Resolve Studio",
+          rE: "(Test) Delivered in 5 days",
+          rA: "(تجريبي) تسليم في 5 أيام",
         },
         {
           c: "reels",
           r: "9 / 16",
-          v: "",
+          v: "https://www.youtube.com/watch?v=4eJVGqJhp40",
           en: "Instagram Reels - Restaurant",
           ar: "ريلز إنستجرام - مطعم",
           de: "Short-form videos built for engagement, with trendy edits and modern effects.",
@@ -2403,7 +2915,7 @@
         {
           c: "longform",
           r: "16 / 9",
-          v: "",
+          v: "https://www.youtube.com/watch?v=R6MlUcmOul8",
           en: "Short Film - Drama",
           ar: "فيلم قصير - دراما",
           de: "Story-driven edit with full color grading and detailed sound design.",
@@ -2525,6 +3037,23 @@
         waSvc: [
           "Hi MarkRuble 👋\nI checked your portfolio and I'd like to work with you.\nThe service I selected: {s}\nCould you send me your project details so I can recommend the right execution, turnaround time, and price?\n\nContent type: \nVideo count / duration: \nDeadline: \n\nLooking forward to creating something strong together.",
           "مرحباً MarkRuble 👋\nشفت البورتفوليو وعايز أبدأ معاك.\nالخدمة اللي اخترتها: {s}\nممكن تبعتلي تفاصيل مشروعك عشان أحدد لك أنسب تنفيذ ومدة وسعر؟\n\nنوع المحتوى: \nعدد الفيديوهات / المدة: \nالموعد المطلوب: \n\nمتحمس نبدأ ونطلع شغل قوي مع بعض.",
+        ],
+        start: ["Start a project", "ابدأ مشروعك"],
+        pos: [
+          "Video editing for Reels, YouTube and commercial ads",
+          "مونتاج للريلز واليوتيوب والإعلانات التجارية",
+        ],
+        reelT: ["My <span>Showreel</span>", "<span>الشوريل</span> بتاعي"],
+        reelS: ["The best of my work in one video", "أحسن شغلي في فيديو واحد"],
+        reelSoon: ["Showreel coming soon", "الشوريل قريباً"],
+        lGoal: ["Goal", "الهدف"],
+        lRole: ["Role", "دوري"],
+        lTools: ["Tools", "الأدوات"],
+        lResult: ["Result", "النتيجة"],
+        testT: ["Client <span>Feedback</span>", "آراء <span>العملاء</span>"],
+        testS: [
+          "What clients say about working with me",
+          "اللي قاله العملاء عن الشغل معايا",
         ],
         tip: ["Chat on WhatsApp", "كلمني على الواتساب"],
         foot: [
@@ -2688,14 +3217,16 @@
         const f = $(".fb.on")?.dataset.f || "all";
         $("#grid").innerHTML = P.map((p, i) => {
           const y = ytId(p.v),
-            th = p.th || (y ? `https://i.ytimg.com/vi/${y}/hqdefault.jpg` : "");
+            th =
+              p.th ||
+              (y ? `https://i.ytimg.com/vi/${y}/maxresdefault.jpg` : "");
           const media = th
-            ? `<img src="${esc(th)}" alt="" loading="lazy">`
+            ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'"` : ""}>`
             : p.v && !vimeoId(p.v)
               ? `<video src="${esc(p.v)}#t=0.5" muted playsinline preload="metadata"></video>`
               : `<i class="fas fa-film"></i>`;
           return `<article class="proj rv ${p.v ? "" : "ph"}" data-idx="${i}" ${p.v ? `onclick="openModal(${i})"` : ""} style="${f === "all" || f === p.c ? "" : "display:none"}">
-      <div class="tw"><div class="thumb" style="${fitCss(ratioOf(p), 70)}">${media}<span class="play"><i class="fas fa-play"></i></span></div></div>
+      <div class="tw"><div class="thumb" style="${fitCss(ratioOf(p), 70)}">${media}<span class="cat">${t(p.c)}</span><span class="play"><i class="fas fa-play"></i></span></div></div>
       <div class="pi"><h3>${esc(lang === "ar" ? p.ar : p.en)}</h3><p>${esc(lang === "ar" ? p.da : p.de)}</p>
       <div class="tags">${p.tags.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div></article>`;
         }).join("");
@@ -2740,6 +3271,9 @@
         renderProjects();
         waLinks();
         observe();
+        renderReel();
+        renderTestimonials();
+        setTot();
         if ($("#modal").classList.contains("open"))
           openModal(+$("#modal").dataset.idx);
       }
@@ -2766,6 +3300,15 @@
         $("#md").textContent = lang === "ar" ? p.da : p.de;
         $("#mg").innerHTML = p.tags
           .map((x) => `<span>${esc(x)}</span>`)
+          .join("");
+        const rows = [
+          ["lGoal", lang === "ar" ? p.gA : p.gE],
+          ["lRole", p.role],
+          ["lTools", p.tools],
+          ["lResult", lang === "ar" ? p.rA : p.rE],
+        ].filter((x) => x[1]);
+        $("#mi").innerHTML = rows
+          .map((x) => `<div><b>${t(x[0])}</b><span>${esc(x[1])}</span></div>`)
           .join("");
         mv.style.cssText = fitCss(ratioOf(p), 78);
         mv.innerHTML = e
@@ -3192,6 +3735,392 @@
           $$(".price").forEach((el) => pio.observe(el));
         }
       })();
+
+      /* ===== motion pass 4 ===== */
+      if (PHOTO)
+        $$(".avi").forEach((b) => {
+          b.classList.add("has");
+          b.querySelector("img").src = PHOTO;
+        });
+      (() => {
+        /* workflow coverflow */
+        const w = $("#wf"),
+          pills = $("#pills"),
+          items = () => [...w.children];
+        function build() {
+          pills.innerHTML = D.wf
+            .map(
+              (c, i) =>
+                `<button type="button" data-k="${i}">${lang === "ar" ? c[3] : c[1]}</button>`,
+            )
+            .join("");
+          $$("#pills button").forEach(
+            (b) =>
+              (b.onclick = () => {
+                const c = items()[+b.dataset.k];
+                if (c)
+                  c.scrollIntoView({
+                    behavior: "smooth",
+                    inline: "center",
+                    block: "nearest",
+                  });
+              }),
+          );
+        }
+        function upd() {
+          const r = w.getBoundingClientRect(),
+            mid = r.left + r.width / 2;
+          let best = 0,
+            bd = 1e9;
+          items().forEach((c, i) => {
+            const b = c.getBoundingClientRect(),
+              d = (b.left + b.width / 2 - mid) / b.width;
+            c.style.setProperty(
+              "--o",
+              Math.max(-1.5, Math.min(1.5, d)).toFixed(2),
+            );
+            if (Math.abs(d) < bd) {
+              bd = Math.abs(d);
+              best = i;
+            }
+          });
+          const n = $("#wfn"),
+            txt = String(best + 1).padStart(2, "0");
+          if (n.textContent !== txt) {
+            n.textContent = txt;
+            n.classList.remove("pop");
+            void n.offsetWidth;
+            n.classList.add("pop");
+          }
+          $$("#pills button").forEach((b, i) =>
+            b.classList.toggle("on", i === best),
+          );
+        }
+        w.addEventListener("scroll", upd, { passive: true });
+        addEventListener("resize", upd);
+        const rc = renderCards;
+        renderCards = function () {
+          rc();
+          build();
+          requestAnimationFrame(upd);
+        };
+        build();
+        upd();
+        /* side dots */
+        const ids = [
+            "home",
+            "reel",
+            "portfolio",
+            "about",
+            "skills",
+            "services",
+            "workflow",
+            "why",
+            "contact",
+          ],
+          box = document.createElement("div");
+        box.className = "dots";
+        box.innerHTML = ids
+          .map((i) => `<a href="#${i}" tabindex="-1"></a>`)
+          .join("");
+        document.body.append(box);
+        const ds = [...box.children],
+          ss = ids.map((i) => $("#" + i));
+        const f = () => {
+          let c = 0;
+          ss.forEach((s, i) => {
+            if (scrollY + innerHeight * 0.4 >= s.offsetTop) c = i;
+          });
+          ds.forEach((d, i) => d.classList.toggle("on", i === c));
+        };
+        addEventListener("scroll", f, { passive: true });
+        f();
+        /* page-transition wipe on anchor clicks */
+        if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+        const wipe = $("#wipe"),
+          o = {
+            duration: 420,
+            easing: "cubic-bezier(.7,0,.3,1)",
+            fill: "forwards",
+          };
+        document.addEventListener("click", (e) => {
+          const a = e.target.closest('a[href^="#"]');
+          if (!a || a.getAttribute("href") === "#") return;
+          const tg = $(a.getAttribute("href"));
+          if (!tg) return;
+          e.preventDefault();
+          $("#links").classList.remove("open");
+          wipe
+            .animate(
+              [
+                { transform: "translateY(100%)" },
+                { transform: "translateY(0)" },
+              ],
+              o,
+            )
+            .finished.then(() => {
+              scrollTo({
+                top:
+                  tg.id === "home"
+                    ? 0
+                    : tg.getBoundingClientRect().top + scrollY - 80,
+                behavior: "instant",
+              });
+              return wipe.animate(
+                [
+                  { transform: "translateY(0)" },
+                  { transform: "translateY(-100%)" },
+                ],
+                o,
+              ).finished;
+            });
+        });
+      })();
+
+      /* ===== real 3D: WebGL film reel in the hero ===== */
+      (() => {
+        if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+        const hero = $(".hero"),
+          cv = document.createElement("canvas");
+        cv.id = "gl";
+        hero.insertBefore(cv, $("#fx"));
+        const sc = document.createElement("script");
+        sc.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+        sc.onload = () => {
+          try {
+            init();
+          } catch (e) {
+            cv.remove();
+            console.warn("3D hero disabled:", e);
+          }
+        };
+        sc.onerror = () => cv.remove();
+        document.head.append(sc);
+        function init() {
+          const T = THREE,
+            r = new T.WebGLRenderer({
+              canvas: cv,
+              alpha: true,
+              antialias: true,
+            });
+          r.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+          const scene = new T.Scene(),
+            cam = new T.PerspectiveCamera(42, 1, 0.1, 100);
+          cam.position.z = 11;
+          scene.add(new T.AmbientLight(0xffffff, 0.45));
+          const l1 = new T.PointLight(0x8b5cf6, 3, 40);
+          l1.position.set(-6, 5, 6);
+          const l2 = new T.PointLight(0xf59e0b, 2.4, 40);
+          l2.position.set(6, -4, 5);
+          const l3 = new T.DirectionalLight(0xffffff, 0.7);
+          l3.position.set(0, 4, 8);
+          scene.add(l1, l2, l3);
+          const metal = new T.MeshStandardMaterial({
+            color: 0xc4b5fd,
+            metalness: 0.75,
+            roughness: 0.28,
+          });
+          const dark = new T.MeshStandardMaterial({
+            color: 0x0b0a12,
+            metalness: 0.2,
+            roughness: 0.8,
+          });
+          const film = new T.MeshStandardMaterial({
+            color: 0x1a1426,
+            metalness: 0.3,
+            roughness: 0.6,
+            emissive: 0x2b1a05,
+          });
+          const reel = new T.Group(),
+            spin = new T.Group();
+          reel.add(spin);
+          const cyl = (rt, h, m, seg = 64) => {
+            const g = new T.CylinderGeometry(rt, rt, h, seg);
+            g.rotateX(Math.PI / 2);
+            return new T.Mesh(g, m);
+          };
+          [-0.42, 0.42].forEach((z) => {
+            const f = cyl(2.3, 0.12, metal);
+            f.position.z = z;
+            spin.add(f);
+            const rim = new T.Mesh(
+              new T.TorusGeometry(2.3, 0.07, 16, 80),
+              metal,
+            );
+            rim.position.z = z;
+            spin.add(rim);
+            for (let i = 0; i < 6; i++) {
+              const a = (i / 6) * Math.PI * 2,
+                h = cyl(0.55, 0.2, dark, 32);
+              h.position.set(Math.cos(a) * 1.3, Math.sin(a) * 1.3, z);
+              spin.add(h);
+            }
+          });
+          spin.add(
+            cyl(1.7, 0.72, film),
+            cyl(0.5, 1, metal, 32),
+            cyl(0.18, 1.1, dark, 24),
+          );
+          const ringM = (c, o) =>
+            new T.MeshBasicMaterial({
+              color: c,
+              transparent: true,
+              opacity: o,
+            });
+          const ring1 = new T.Mesh(
+            new T.TorusGeometry(3.6, 0.015, 8, 120),
+            ringM(0xf59e0b, 0.7),
+          );
+          const ring2 = new T.Mesh(
+            new T.TorusGeometry(4.2, 0.012, 8, 120),
+            ringM(0x8b5cf6, 0.8),
+          );
+          ring1.rotation.x = 1.2;
+          ring2.rotation.set(0.5, 0.9, 0);
+          reel.add(ring1, ring2);
+          const shards = [];
+          for (let i = 0; i < 10; i++) {
+            const m = new T.Mesh(
+              new T.IcosahedronGeometry(0.14 + Math.random() * 0.12, 0),
+              new T.MeshStandardMaterial({
+                color: i % 2 ? 0xf59e0b : 0x8b5cf6,
+                metalness: 0.6,
+                roughness: 0.3,
+              }),
+            );
+            m.userData = {
+              a: Math.random() * 6.28,
+              rr: 3.4 + Math.random() * 1.4,
+              s: 0.2 + Math.random() * 0.4,
+              y: (Math.random() - 0.5) * 3,
+            };
+            shards.push(m);
+            reel.add(m);
+          }
+          reel.rotation.set(-0.35, 0.55, 0);
+          scene.add(reel);
+          let mx = 0,
+            my = 0,
+            vis = true;
+          const rs = () => {
+            const W = hero.clientWidth,
+              H = hero.clientHeight;
+            r.setSize(W, H, false);
+            cam.aspect = W / H;
+            cam.updateProjectionMatrix();
+            reel.scale.setScalar(Math.min(1, (W / H) * 0.95));
+          };
+          rs();
+          addEventListener("resize", rs);
+          hero.addEventListener("pointermove", (e) => {
+            const b = hero.getBoundingClientRect();
+            mx = ((e.clientX - b.left) / b.width - 0.5) * 2;
+            my = ((e.clientY - b.top) / b.height - 0.5) * 2;
+          });
+          new IntersectionObserver((es) => {
+            vis = es[0].isIntersecting;
+          }).observe(hero);
+          const clock = new T.Clock();
+          (function loop() {
+            requestAnimationFrame(loop);
+            if (!vis) return;
+            const t = clock.getElapsedTime();
+            spin.rotation.z = -t * 0.35;
+            reel.rotation.y +=
+              (0.55 + mx * 0.5 + scrollY * 0.0015 - reel.rotation.y) * 0.05;
+            reel.rotation.x += (-0.35 + my * 0.3 - reel.rotation.x) * 0.05;
+            reel.position.y = Math.sin(t * 0.8) * 0.25 - scrollY * 0.004;
+            ring1.rotation.z = t * 0.25;
+            ring2.rotation.z = -t * 0.18;
+            shards.forEach((m) => {
+              const u = m.userData,
+                a = u.a + t * u.s * 0.4;
+              m.position.set(
+                Math.cos(a) * u.rr,
+                u.y + Math.sin(t + u.a) * 0.3,
+                Math.sin(a) * u.rr * 0.6,
+              );
+              m.rotation.x = t * u.s;
+              m.rotation.y = t * u.s * 1.3;
+            });
+            r.render(scene, cam);
+          })();
+        }
+      })();
+
+      /* ===== showreel, testimonials, section counter ===== */
+      function renderReel() {
+        const v = SITE.showreel,
+          b = $("#reelbox"),
+          y = ytId(v);
+        if (!v) {
+          b.className = "reelbox rv in soon";
+          b.onclick = null;
+          b.innerHTML = `<i class="fas fa-film"></i><span>${t("reelSoon")}</span>`;
+          return;
+        }
+        const th =
+          SITE.showreelThumb ||
+          (y ? `https://i.ytimg.com/vi/${y}/maxresdefault.jpg` : "");
+        const media = th
+          ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'"` : ""}>`
+          : vimeoId(v)
+            ? ""
+            : `<video src="${esc(v)}#t=0.5" muted playsinline preload="metadata"></video>`;
+        b.className = "reelbox rv in";
+        b.innerHTML =
+          media +
+          `<button class="bigplay" type="button" aria-label="Play showreel"><i class="fas fa-play"></i></button>`;
+        b.onclick = openReel;
+      }
+      function openReel() {
+        const m = $("#modal"),
+          mv = $("#mv"),
+          v = SITE.showreel,
+          e = embedUrl(v);
+        $("#mt").textContent = t("reelT").replace(/<[^>]+>/g, "");
+        $("#md").textContent = t("reelS");
+        $("#mg").innerHTML = "";
+        $("#mi").innerHTML = "";
+        mv.style.cssText = fitCss("16 / 9", 78);
+        mv.innerHTML = e
+          ? `<iframe src="${esc(e)}" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>`
+          : `<video controls playsinline autoplay src="${esc(v)}"></video>`;
+        delete m.dataset.idx;
+        m.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function renderTestimonials() {
+        const sec = $("#proof");
+        if (!TESTIMONIALS.length) {
+          sec.hidden = true;
+          return;
+        }
+        sec.hidden = false;
+        $("#tg").innerHTML = TESTIMONIALS.map(
+          (x) =>
+            `<div class="card tq rv"><i class="fas fa-quote-right"></i><p>${esc(lang === "ar" && x.qa ? x.qa : x.q)}</p><h3>${esc(x.name)}</h3><small>${esc(x.role || "")}</small></div>`,
+        ).join("");
+        observe();
+      }
+      function setTot() {
+        document.documentElement.style.setProperty(
+          "--tot",
+          `"0${$$("section:not(.hero)").filter((x) => !x.hidden).length}"`,
+        );
+      }
+
+      /* apply SITE links; hide any that are empty */
+      $$("[data-link]").forEach((a) => {
+        const k = a.dataset.link,
+          v = SITE[k];
+        if (!v) {
+          a.hidden = true;
+          return;
+        }
+        a.href = k === "email" ? "mailto:" + v : v;
+      });
 
       setLang(lang);
     </script>
