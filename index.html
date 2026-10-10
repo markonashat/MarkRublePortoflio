@@ -15,6 +15,13 @@
     />
     <meta name="theme-color" content="#0a0a0f" />
     <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- AFTER you publish: upload a 1200x630 JPG (under 300 KB), put your real address below, then remove the comment markers:
+<link rel="canonical" href="https://YOUR-DOMAIN/">
+<meta property="og:url" content="https://YOUR-DOMAIN/">
+<meta property="og:image" content="https://YOUR-DOMAIN/og-image.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MarkRuble - Video Editor, Colorist and Motion Designer"> -->
     <meta
       property="og:title"
       content="MarkRuble | Video Editor, Colorist & Motion Designer"
@@ -554,7 +561,7 @@
       #wf {
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
       }
-      #why {
+      #whyc {
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
         max-width: 1000px;
       }
@@ -1870,7 +1877,7 @@
       #sk .card {
         --rs: 0.8;
       }
-      #why .card {
+      #whyc .card {
         --ry: 46px;
       }
       .filters,
@@ -1880,7 +1887,7 @@
       /* living icons */
       .sc > i,
       #sk .card > i,
-      #why .card > i {
+      #whyc .card > i {
         animation: ico 4.5s ease-in-out infinite;
       }
       @keyframes ico {
@@ -2215,7 +2222,7 @@
       .svc,
       #sk,
       #wf,
-      #why,
+      #whyc,
       .wfc {
         max-width: 1160px;
       }
@@ -2407,6 +2414,50 @@
           opacity: 1;
         }
       }
+
+      /* ===== 10 · FIXES FROM A REAL RENDER TEST ===== */
+      .svc .sc:nth-child(3) {
+        order: 3;
+      } /* package order: Long-Form, Reels (popular, center), Ad */
+      .st h2 {
+        margin-bottom: 1.1rem;
+      } /* underline no longer cuts through the subtitle */
+      .ghost {
+        font-size: clamp(3.2rem, 13vw, 12rem);
+      } /* giant hero word fits the screen */
+
+      /* ===== 11 · ACCESSIBILITY + LITE MODE ===== */
+      :focus-visible {
+        outline: 2px solid #c4b5fd;
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+      .proj:focus-visible {
+        outline-offset: 4px;
+        border-radius: 16px;
+      }
+      .skip {
+        position: fixed;
+        top: -60px;
+        inset-inline-start: 12px;
+        z-index: 100000;
+        padding: 0.6rem 1rem;
+        border-radius: 10px;
+        background: var(--p);
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        transition: top 0.2s;
+      }
+      .skip:focus {
+        top: 12px;
+      }
+      .lite body::after {
+        display: none;
+      }
+      .lite .mesh i {
+        animation: none;
+      }
     </style>
     <script type="application/ld+json">
       {
@@ -2435,14 +2486,15 @@
     </div>
     <div class="sp" id="sp"></div>
     <div class="wipe" id="wipe"></div>
+    <a class="skip" href="#portfolio">Skip to content</a>
     <nav id="nav">
       <a class="logo" href="#home">MarkRuble</a>
       <ul class="links" id="links">
         <li><a href="#home" data-i="nHome">Home</a></li>
         <li><a href="#portfolio" data-i="nWork">Portfolio</a></li>
-        <li><a href="#about" data-i="nAbout">About</a></li>
         <li><a href="#services" data-i="nServ">Services</a></li>
         <li><a href="#workflow" data-i="nFlow">Workflow</a></li>
+        <li><a href="#about" data-i="nAbout">About</a></li>
         <li><a href="#why" data-i="nWhy">Why Me?</a></li>
         <li><a href="#contact" data-i="nContact">Contact</a></li>
       </ul>
@@ -2461,267 +2513,276 @@
       </div>
     </nav>
 
-    <section class="hero" id="home">
-      <div class="mesh"><i></i><i></i><i></i></div>
-      <canvas id="fx"></canvas>
-      <div class="ghost" aria-hidden="true">MARKRUBLE</div>
-      <div class="chip c1">
-        <i class="fas fa-film"></i>DaVinci Resolve Studio
-      </div>
-      <div class="chip c2"><i class="fas fa-magic"></i>After Effects</div>
-      <div class="chip c3"><i class="fas fa-palette"></i>Color Grading</div>
-      <div class="in">
-        <div class="av h-a">
-          <span class="ring"></span>
-          <div class="avi"><img alt="MarkRuble" /><b>MR</b></div>
+    <main id="main">
+      <section class="hero" id="home">
+        <div class="mesh"><i></i><i></i><i></i></div>
+        <canvas id="fx"></canvas>
+        <div class="ghost" aria-hidden="true">MARKRUBLE</div>
+        <div class="chip c1">
+          <i class="fas fa-film"></i>DaVinci Resolve Studio
         </div>
-        <div class="badge-h h-a" data-i="badge">
-          🎬 Video Editor | Colorist | Motion Designer
-        </div>
-        <h1 class="h-b">
-          <span data-i="im">I'm</span> <span class="g">MarkRuble</span>
-        </h1>
-        <h2 class="pos h-b" data-i="pos"></h2>
-        <p data-i="heroP"></p>
-        <div class="row h-d">
-          <a href="#portfolio" class="btn b1"
-            ><i class="fas fa-play"></i
-            ><span data-i="viewWork">View My Work</span></a
-          >
-          <a href="#services" class="btn b2"
-            ><i class="fas fa-tags"></i
-            ><span data-i="prices">Services & Pricing</span></a
-          >
-        </div>
-      </div>
-      <div class="scrl"><i></i></div>
-    </section>
-
-    <section class="alt" id="reel">
-      <div class="st rv">
-        <h2 data-i="reelT"></h2>
-        <p data-i="reelS"></p>
-      </div>
-      <div class="reelbox rv" id="reelbox"></div>
-    </section>
-
-    <div class="marq" aria-hidden="true"><div class="mt" id="mt"></div></div>
-
-    <section id="portfolio">
-      <div class="st rv">
-        <h2 data-i="workT"></h2>
-        <p data-i="workS"></p>
-      </div>
-      <div class="filters rv">
-        <button class="fb on" data-f="all" data-i="all">All</button>
-        <button class="fb" data-f="reels" data-i="reels">Reels / Shorts</button>
-        <button class="fb" data-f="longform" data-i="longform">
-          Long-Form
-        </button>
-        <button class="fb" data-f="ads" data-i="ads">Ads</button>
-      </div>
-      <div class="grid" id="grid"></div>
-      <div class="cta-row">
-        <a
-          class="btn b1"
-          data-wa="general"
-          target="_blank"
-          rel="noopener noreferrer"
-          ><i class="fab fa-whatsapp"></i
-          ><span data-i="start">Start a project</span></a
-        >
-        <a
-          class="btn b2"
-          data-link="youtube"
-          href="https://www.youtube.com/@mark_ruble"
-          target="_blank"
-          rel="noopener noreferrer"
-          ><i class="fab fa-youtube"></i
-          ><span data-i="more">More on YouTube</span></a
-        >
-      </div>
-    </section>
-
-    <section class="alt" id="about">
-      <div class="st rv">
-        <h2 data-i="aboutT"></h2>
-        <p data-i="aboutS"></p>
-      </div>
-      <div class="wrap about">
-        <!-- Replace the icon with your photo: <img src="your-photo.jpg" alt="MarkRuble"> -->
-        <div class="lanyard rv">
-          <div class="strap"></div>
-          <div class="badge3d" id="badge">
-            <div class="hole"></div>
-            <div class="bph avi"><img alt="MarkRuble" /><b>MR</b></div>
-            <div class="bn">MarkRuble</div>
-            <div class="br" data-i="aboutRole"></div>
-            <div class="bt">
-              <span>DaVinci</span><span>After Effects</span><span>2+ yrs</span>
-            </div>
-            <div class="shine"></div>
+        <div class="chip c2"><i class="fas fa-magic"></i>After Effects</div>
+        <div class="chip c3"><i class="fas fa-palette"></i>Color Grading</div>
+        <div class="in">
+          <div class="av h-a">
+            <span class="ring"></span>
+            <div class="avi"><img alt="MarkRuble" /><b>MR</b></div>
+          </div>
+          <div class="badge-h h-a" data-i="badge">
+            🎬 Video Editor | Colorist | Motion Designer
+          </div>
+          <h1 class="h-b">
+            <span data-i="im">I'm</span> <span class="g">MarkRuble</span>
+          </h1>
+          <h2 class="pos h-b" data-i="pos"></h2>
+          <p data-i="heroP"></p>
+          <div class="row h-d">
+            <a href="#portfolio" class="btn b1"
+              ><i class="fas fa-play"></i
+              ><span data-i="viewWork">View My Work</span></a
+            >
+            <a href="#services" class="btn b2"
+              ><i class="fas fa-tags"></i
+              ><span data-i="prices">Services & Pricing</span></a
+            >
           </div>
         </div>
-        <div class="rv">
-          <h3 data-i="aboutRole"></h3>
-          <p data-i="ab1"></p>
-          <p data-i="ab2"></p>
-          <p data-i="ab3"></p>
-          <div class="stats">
-            <div><b>2+</b><span data-i="years">Years experience</span></div>
-            <div><b>DR</b><span>DaVinci Resolve Studio</span></div>
-            <div><b>AE</b><span>After Effects</span></div>
-          </div>
+        <div class="scrl"><i></i></div>
+      </section>
+
+      <section class="alt" id="reel">
+        <div class="st rv">
+          <h2 data-i="reelT"></h2>
+          <p data-i="reelS"></p>
         </div>
-      </div>
-    </section>
+        <div class="reelbox rv" id="reelbox"></div>
+      </section>
 
-    <section id="skills">
-      <div class="st rv">
-        <h2 data-i="skT"></h2>
-        <p data-i="skS"></p>
+      <div class="marq" aria-hidden="true">
+        <div class="mt" id="mtrack"></div>
       </div>
-      <div class="cards" id="sk"></div>
-    </section>
 
-    <section class="alt" id="services">
-      <div class="st rv">
-        <h2 data-i="servT"></h2>
-        <p data-i="servS"></p>
-      </div>
-      <div class="svc">
-        <div class="sc pop rv">
-          <span class="bd" data-i="popular">Most Popular</span
-          ><i class="fas fa-mobile-alt"></i>
-          <h3 data-i="reels">Reels / Shorts</h3>
-          <div class="price">
-            <small data-i="from">Starting at</small>450
-            <span data-i="egp">EGP</span>
-          </div>
-          <ul data-list="rF"></ul>
+      <section id="portfolio">
+        <div class="st rv">
+          <h2 data-i="workT"></h2>
+          <p data-i="workS"></p>
+        </div>
+        <div class="filters rv">
+          <button class="fb on" data-f="all" data-i="all">All</button>
+          <button class="fb" data-f="reels" data-i="reels">
+            Reels / Shorts
+          </button>
+          <button class="fb" data-f="longform" data-i="longform">
+            Long-Form
+          </button>
+          <button class="fb" data-f="ads" data-i="ads">Ads</button>
+        </div>
+        <div class="grid" id="grid"></div>
+        <div class="cta-row">
           <a
             class="btn b1"
-            data-wa="reels"
+            data-wa="general"
             target="_blank"
             rel="noopener noreferrer"
-            data-i="order"
-            >Order Now</a
+            ><i class="fab fa-whatsapp"></i
+            ><span data-i="start">Start a project</span></a
           >
-        </div>
-        <div class="sc rv">
-          <i class="fab fa-youtube"></i>
-          <h3 data-i="longform">Long-Form</h3>
-          <div class="price">
-            <small data-i="from">Starting at</small>1200
-            <span data-i="egp">EGP</span>
-          </div>
-          <ul data-list="lF"></ul>
           <a
             class="btn b2"
-            data-wa="longform"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-i="order"
-            >Order Now</a
-          >
-        </div>
-        <div class="sc rv">
-          <i class="fas fa-ad"></i>
-          <h3 data-i="ad">Commercial Ad</h3>
-          <div class="price">
-            <small data-i="from">Starting at</small>2000
-            <span data-i="egp">EGP</span>
-          </div>
-          <ul data-list="aF"></ul>
-          <a
-            class="btn b2"
-            data-wa="ad"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-i="order"
-            >Order Now</a
-          >
-        </div>
-      </div>
-      <p class="note rv" data-i="note"></p>
-    </section>
-
-    <section id="workflow">
-      <div class="st rv">
-        <h2 data-i="flowT"></h2>
-        <p data-i="flowS"></p>
-      </div>
-      <div class="wfc">
-        <div><b id="wfn">01</b><span>/ 04</span></div>
-        <div>
-          <button type="button" id="wfp" aria-label="Previous">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button type="button" id="wfx" aria-label="Next">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-      </div>
-      <div class="cards" id="wf"></div>
-      <div class="pills" id="pills"></div>
-    </section>
-
-    <section class="alt" id="why">
-      <div class="st rv">
-        <h2 data-i="whyT"></h2>
-        <p data-i="whyS"></p>
-      </div>
-      <div class="cards" id="why"></div>
-    </section>
-
-    <section id="proof" hidden>
-      <div class="st rv">
-        <h2 data-i="testT"></h2>
-        <p data-i="testS"></p>
-      </div>
-      <div class="tg" id="tg"></div>
-    </section>
-
-    <div class="marq2" aria-hidden="true"><div class="mt2" id="mt2"></div></div>
-
-    <section id="contact">
-      <div class="st rv">
-        <h2 data-i="ctT"></h2>
-        <p data-i="ctS"></p>
-      </div>
-      <div class="cbox rv">
-        <h3 data-i="ctH">Ready to start?</h3>
-        <p data-i="ctP"></p>
-        <a
-          class="btn b1"
-          data-wa="general"
-          target="_blank"
-          rel="noopener noreferrer"
-          ><i class="fab fa-whatsapp"></i> WhatsApp</a
-        >
-        <div class="soc">
-          <a
-            data-link="instagram"
-            href="https://www.instagram.com/markrublex"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            ><i class="fab fa-instagram"></i
-          ></a>
-          <a
             data-link="youtube"
             href="https://www.youtube.com/@mark_ruble"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="YouTube"
             ><i class="fab fa-youtube"></i
-          ></a>
-          <a data-link="email" hidden aria-label="Email"
-            ><i class="fas fa-envelope"></i
-          ></a>
+            ><span data-i="more">More on YouTube</span></a
+          >
         </div>
+      </section>
+
+      <section class="alt" id="services">
+        <div class="st rv">
+          <h2 data-i="servT"></h2>
+          <p data-i="servS"></p>
+        </div>
+        <div class="svc">
+          <div class="sc pop rv">
+            <span class="bd" data-i="popular">Most Popular</span
+            ><i class="fas fa-mobile-alt"></i>
+            <h3 data-i="reels">Reels / Shorts</h3>
+            <div class="price">
+              <small data-i="from">Starting at</small>450
+              <span data-i="egp">EGP</span>
+            </div>
+            <ul data-list="rF"></ul>
+            <a
+              class="btn b1"
+              data-wa="reels"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i="order"
+              >Order Now</a
+            >
+          </div>
+          <div class="sc rv">
+            <i class="fab fa-youtube"></i>
+            <h3 data-i="longform">Long-Form</h3>
+            <div class="price">
+              <small data-i="from">Starting at</small>1200
+              <span data-i="egp">EGP</span>
+            </div>
+            <ul data-list="lF"></ul>
+            <a
+              class="btn b2"
+              data-wa="longform"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i="order"
+              >Order Now</a
+            >
+          </div>
+          <div class="sc rv">
+            <i class="fas fa-ad"></i>
+            <h3 data-i="ad">Commercial Ad</h3>
+            <div class="price">
+              <small data-i="from">Starting at</small>2000
+              <span data-i="egp">EGP</span>
+            </div>
+            <ul data-list="aF"></ul>
+            <a
+              class="btn b2"
+              data-wa="ad"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i="order"
+              >Order Now</a
+            >
+          </div>
+        </div>
+        <p class="note rv" data-i="note"></p>
+      </section>
+
+      <section id="workflow">
+        <div class="st rv">
+          <h2 data-i="flowT"></h2>
+          <p data-i="flowS"></p>
+        </div>
+        <div class="wfc">
+          <div><b id="wfn">01</b><span>/ 04</span></div>
+          <div>
+            <button type="button" id="wfp" aria-label="Previous">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button type="button" id="wfx" aria-label="Next">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="cards" id="wf"></div>
+        <div class="pills" id="pills"></div>
+      </section>
+
+      <section class="alt" id="about">
+        <div class="st rv">
+          <h2 data-i="aboutT"></h2>
+          <p data-i="aboutS"></p>
+        </div>
+        <div class="wrap about">
+          <!-- Replace the icon with your photo: <img src="your-photo.jpg" alt="MarkRuble"> -->
+          <div class="lanyard rv">
+            <div class="strap"></div>
+            <div class="badge3d" id="badge">
+              <div class="hole"></div>
+              <div class="bph avi"><img alt="MarkRuble" /><b>MR</b></div>
+              <div class="bn">MarkRuble</div>
+              <div class="br" data-i="aboutRole"></div>
+              <div class="bt">
+                <span>DaVinci</span><span>After Effects</span
+                ><span>2+ yrs</span>
+              </div>
+              <div class="shine"></div>
+            </div>
+          </div>
+          <div class="rv">
+            <h3 data-i="aboutRole"></h3>
+            <p data-i="ab1"></p>
+            <p data-i="ab2"></p>
+            <p data-i="ab3"></p>
+            <div class="stats">
+              <div><b>2+</b><span data-i="years">Years experience</span></div>
+              <div><b>DR</b><span>DaVinci Resolve Studio</span></div>
+              <div><b>AE</b><span>After Effects</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills">
+        <div class="st rv">
+          <h2 data-i="skT"></h2>
+          <p data-i="skS"></p>
+        </div>
+        <div class="cards" id="sk"></div>
+      </section>
+
+      <section class="alt" id="why">
+        <div class="st rv">
+          <h2 data-i="whyT"></h2>
+          <p data-i="whyS"></p>
+        </div>
+        <div class="cards" id="whyc"></div>
+      </section>
+
+      <section id="proof" hidden>
+        <div class="st rv">
+          <h2 data-i="testT"></h2>
+          <p data-i="testS"></p>
+        </div>
+        <div class="tg" id="tg"></div>
+      </section>
+
+      <div class="marq2" aria-hidden="true">
+        <div class="mt2" id="mt2"></div>
       </div>
-    </section>
+
+      <section id="contact">
+        <div class="st rv">
+          <h2 data-i="ctT"></h2>
+          <p data-i="ctS"></p>
+        </div>
+        <div class="cbox rv">
+          <h3 data-i="ctH">Ready to start?</h3>
+          <p data-i="ctP"></p>
+          <a
+            class="btn b1"
+            data-wa="general"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fab fa-whatsapp"></i> WhatsApp</a
+          >
+          <div class="soc">
+            <a
+              data-link="instagram"
+              href="https://www.instagram.com/markrublex"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              data-link="youtube"
+              href="https://www.youtube.com/@mark_ruble"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="YouTube"
+              ><i class="fab fa-youtube"></i
+            ></a>
+            <a data-link="email" hidden aria-label="Email"
+              ><i class="fas fa-envelope"></i
+            ></a>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <footer data-i="foot"></footer>
 
@@ -2804,7 +2865,7 @@
         <div id="al"></div>
       </div>
     </div>
-    <div id="modal" role="dialog" aria-modal="true">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
       <div class="mbox">
         <button
           class="mx"
@@ -2837,7 +2898,7 @@
         instagram: "https://www.instagram.com/markrublex",
         youtube: "https://www.youtube.com/@mark_ruble",
         email: "", // e.g. "you@domain.com"; the email icon appears automatically
-        showreel: "https://www.youtube.com/watch?v=R6MlUcmOul8", // YouTube/Vimeo link or file path ("videos/reel.mp4") of your best 60-90s reel
+        showreel: "https://www.youtube.com/watch?v=WhWc3b3KhnY", // YouTube/Vimeo link or file path ("videos/reel.mp4") of your best 60-90s reel
         showreelThumb: "", // optional cover image for the showreel (needed for Vimeo or self-hosted files)
       };
       /* ✏️ EDIT ME (3) — client testimonials. Leave empty and the whole section stays hidden.
@@ -2859,6 +2920,13 @@
       ];
       const WA = SITE.whatsapp,
         PHOTO = SITE.photo;
+      /* LITE mode: weak/small devices skip the heavy effects (3D reel, particles, grain). Add ?fx=full to the address to force everything on. */
+      const LITE =
+        !/[?&]fx=full/.test(location.search) &&
+        ((navigator.hardwareConcurrency || 8) <= 4 ||
+          (navigator.deviceMemory || 8) <= 4 ||
+          matchMedia("(max-width:640px)").matches);
+      document.documentElement.classList.toggle("lite", LITE);
       const $ = (s) => document.querySelector(s),
         $$ = (s) => [...document.querySelectorAll(s)];
 
@@ -2873,7 +2941,7 @@
         {
           c: "ads",
           r: "16 / 9",
-          v: "https://www.youtube.com/watch?v=YE7VzlLtp-4",
+          v: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
           en: "Commercial Ad - Clothing Brand",
           ar: "إعلان تجاري - براند ملابس",
           de: "Fast-paced edit with professional motion graphics and text animation.",
@@ -2905,7 +2973,7 @@
         {
           c: "reels",
           r: "9 / 16",
-          v: "https://www.youtube.com/watch?v=4eJVGqJhp40",
+          v: "https://www.youtube.com/watch?v=R6MlUcmOul8",
           en: "Instagram Reels - Restaurant",
           ar: "ريلز إنستجرام - مطعم",
           de: "Short-form videos built for engagement, with trendy edits and modern effects.",
@@ -2915,12 +2983,22 @@
         {
           c: "longform",
           r: "16 / 9",
-          v: "https://www.youtube.com/watch?v=R6MlUcmOul8",
+          v: "https://www.youtube.com/watch?v=TLkA0RELQ1g",
           en: "Short Film - Drama",
           ar: "فيلم قصير - دراما",
           de: "Story-driven edit with full color grading and detailed sound design.",
           da: "سرد قصصي وتلوين احترافي كامل مع ساوند ديزاين دقيق.",
           tags: ["Color Grading", "Storytelling", "Sound Design"],
+        },
+        {
+          c: "ads",
+          r: "16 / 9",
+          v: "https://www.youtube.com/watch?v=Y-rmzh0PI3c",
+          en: "Product Promo - Sample",
+          ar: "إعلان منتج - تجريبي",
+          de: "Test project: replace with your own work.",
+          da: "مشروع تجريبي: استبدله بشغلك.",
+          tags: ["Motion", "Color Grading"],
         },
       ];
 
@@ -3202,11 +3280,15 @@
       try {
         lang = localStorage.getItem("mr_lang") === "ar" ? "ar" : "en";
       } catch (e) {}
+      {
+        const q = new URLSearchParams(location.search).get("lang");
+        if (q === "ar" || q === "en") lang = q;
+      } // share yoursite/?lang=ar for the Arabic version
       const t = (k) => L[k][lang === "ar" ? 1 : 0];
 
       function renderCards() {
         for (const k in D)
-          $("#" + k).innerHTML = D[k]
+          $("#" + (k === "why" ? "whyc" : k)).innerHTML = D[k]
             .map(
               (c) =>
                 `<div class="card rv"><i class="fas fa-${c[0]}"></i><h3>${lang === "ar" ? c[3] : c[1]}</h3><p>${lang === "ar" ? c[4] : c[2]}</p></div>`,
@@ -3221,11 +3303,11 @@
               p.th ||
               (y ? `https://i.ytimg.com/vi/${y}/maxresdefault.jpg` : "");
           const media = th
-            ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'"` : ""}>`
+            ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'" onload="if(this.naturalWidth<400){this.onload=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'}"` : ""}>`
             : p.v && !vimeoId(p.v)
               ? `<video src="${esc(p.v)}#t=0.5" muted playsinline preload="metadata"></video>`
               : `<i class="fas fa-film"></i>`;
-          return `<article class="proj rv ${p.v ? "" : "ph"}" data-idx="${i}" ${p.v ? `onclick="openModal(${i})"` : ""} style="${f === "all" || f === p.c ? "" : "display:none"}">
+          return `<article class="proj rv ${p.v ? "" : "ph"}" data-idx="${i}" ${p.v ? `onclick="openModal(${i})" tabindex="0" role="button" aria-label="${esc(lang === "ar" ? p.ar : p.en)}"` : ""} style="${f === "all" || f === p.c ? "" : "display:none"}">
       <div class="tw"><div class="thumb" style="${fitCss(ratioOf(p), 70)}">${media}<span class="cat">${t(p.c)}</span><span class="play"><i class="fas fa-play"></i></span></div></div>
       <div class="pi"><h3>${esc(lang === "ar" ? p.ar : p.en)}</h3><p>${esc(lang === "ar" ? p.da : p.de)}</p>
       <div class="tags">${p.tags.map((x) => `<span>${esc(x)}</span>`).join("")}</div></div></article>`;
@@ -3317,6 +3399,7 @@
         m.dataset.idx = i;
         m.classList.add("open");
         document.body.style.overflow = "hidden";
+        focusModal();
         const vid = mv.querySelector("video");
         if (vid)
           vid.addEventListener(
@@ -3329,7 +3412,9 @@
           );
       }
       function closeModal() {
+        const was = $("#modal").classList.contains("open");
         $("#modal").classList.remove("open");
+        if (was && lastFocus && lastFocus.focus) lastFocus.focus();
         $("#mv").innerHTML = "";
         document.body.style.overflow = "";
       }
@@ -3412,11 +3497,12 @@
             .concat(w)
             .map((x) => `<span>${x}</span><i>✦</i>`)
             .join("");
-        $("#mt").innerHTML = h + h;
+        $("#mtrack").innerHTML = h + h;
       })();
       /* ===== hero particle network (reacts to the mouse) ===== */
       (() => {
-        if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+        if (LITE || matchMedia("(prefers-reduced-motion:reduce)").matches)
+          return;
         const c = $("#fx"),
           x = c.getContext("2d"),
           m = { x: -999, y: -999 };
@@ -3811,10 +3897,10 @@
             "home",
             "reel",
             "portfolio",
-            "about",
-            "skills",
             "services",
             "workflow",
+            "about",
+            "skills",
             "why",
             "contact",
           ],
@@ -3879,7 +3965,8 @@
 
       /* ===== real 3D: WebGL film reel in the hero ===== */
       (() => {
-        if (matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+        if (LITE || matchMedia("(prefers-reduced-motion:reduce)").matches)
+          return;
         const hero = $(".hero"),
           cv = document.createElement("canvas");
         cv.id = "gl";
@@ -4049,6 +4136,43 @@
         }
       })();
 
+      /* ===== keyboard + dialog accessibility ===== */
+      let lastFocus = null;
+      function focusModal() {
+        setTimeout(() => $("#modal .mx").focus(), 80);
+      } /* wait for the fade-in so the button can take focus */
+      document.addEventListener("focusin", (e) => {
+        if (!$("#modal").classList.contains("open")) lastFocus = e.target;
+      });
+      document.addEventListener("keydown", (e) => {
+        const a = document.activeElement;
+        if (
+          (e.key === "Enter" || e.key === " ") &&
+          a &&
+          a.matches &&
+          a.matches(".proj[role=button]")
+        ) {
+          e.preventDefault();
+          a.click();
+          return;
+        }
+        const m = $("#modal");
+        if (e.key !== "Tab" || !m.classList.contains("open")) return;
+        const f = [...m.querySelectorAll("button,iframe,video")];
+        if (!f.length) return;
+        const i = f.indexOf(a);
+        if (e.shiftKey && i <= 0) {
+          e.preventDefault();
+          f[f.length - 1].focus();
+        } else if (!e.shiftKey && i === f.length - 1) {
+          e.preventDefault();
+          f[0].focus();
+        } else if (i < 0) {
+          e.preventDefault();
+          f[0].focus();
+        }
+      });
+
       /* ===== showreel, testimonials, section counter ===== */
       function renderReel() {
         const v = SITE.showreel,
@@ -4064,7 +4188,7 @@
           SITE.showreelThumb ||
           (y ? `https://i.ytimg.com/vi/${y}/maxresdefault.jpg` : "");
         const media = th
-          ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'"` : ""}>`
+          ? `<img src="${esc(th)}" alt="" loading="lazy" ${y ? `onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'" onload="if(this.naturalWidth<400){this.onload=null;this.src='https://i.ytimg.com/vi/${y}/hqdefault.jpg'}"` : ""}>`
           : vimeoId(v)
             ? ""
             : `<video src="${esc(v)}#t=0.5" muted playsinline preload="metadata"></video>`;
@@ -4090,6 +4214,7 @@
         delete m.dataset.idx;
         m.classList.add("open");
         document.body.style.overflow = "hidden";
+        focusModal();
       }
       function renderTestimonials() {
         const sec = $("#proof");
