@@ -2610,7 +2610,7 @@
             ><i class="fas fa-mobile-alt"></i>
             <h3 data-i="reels">Reels / Shorts</h3>
             <div class="price">
-              <small data-i="from">Starting at</small>450
+              <small data-i="from">Starting at</small>700
               <span data-i="egp">EGP</span>
             </div>
             <ul data-list="rF"></ul>
@@ -2627,7 +2627,7 @@
             <i class="fab fa-youtube"></i>
             <h3 data-i="longform">Long-Form</h3>
             <div class="price">
-              <small data-i="from">Starting at</small>1200
+              <small data-i="from">Starting at</small>2500
               <span data-i="egp">EGP</span>
             </div>
             <ul data-list="lF"></ul>
@@ -2644,7 +2644,7 @@
             <i class="fas fa-ad"></i>
             <h3 data-i="ad">Commercial Ad</h3>
             <div class="price">
-              <small data-i="from">Starting at</small>2000
+              <small data-i="from">Starting at</small>4000
               <span data-i="egp">EGP</span>
             </div>
             <ul data-list="aF"></ul>
@@ -2901,6 +2901,9 @@
         showreel: "https://www.youtube.com/watch?v=WhWc3b3KhnY", // YouTube/Vimeo link or file path ("videos/reel.mp4") of your best 60-90s reel
         showreelThumb: "", // optional cover image for the showreel (needed for Vimeo or self-hosted files)
       };
+      /* ✏️ EDIT ME (4) — package prices in EGP, shown as "Starting at". Change the numbers here and the page follows.
+   Previous values were: reels 450, longform 1200, ad 2000. */
+      const PRICES = { reels: 700, longform: 2500, ad: 4000 };
       /* ✏️ EDIT ME (3) — client testimonials. Leave empty and the whole section stays hidden.
    Add only real quotes (with the client's permission). Example:
    { q: "Fast and exactly what I wanted.", qa: "سريع وبالظبط اللي عايزه.", name: "Client name", role: "Brand / channel" } */
@@ -3002,6 +3005,44 @@
         },
       ];
 
+      /* ✏️ EDIT ME (2b) — THE EASIEST WAY TO ADD VIDEOS: one line per video. Copy a line, remove the // and change it.
+   Format:  "video link or file path | category | English title | Arabic title (optional) | ratio (optional) | cover image (optional)"
+   Your own video files: put them in a folder named videos next to index.html and write the path, e.g. "videos/my-reel.mp4"
+   category: reels, longform or ads   ·   ratio only for a vertical video that is not a YouTube Short, e.g. "9 / 16"
+   The cover image, popup and filters are all created automatically. Add as many lines as you want. */
+      const QUICK = [
+        // "https://www.youtube.com/watch?v=XXXXXXXXXXX | reels | My reel title | عنوان الريل",
+        // "https://youtu.be/XXXXXXXXXXX | longform | My YouTube video title",
+        // "https://www.youtube.com/shorts/XXXXXXXXXXX | reels | A YouTube Short",
+        // "videos/my-reel.mp4 | reels | My own video file | عنوان بالعربي | | covers/my-reel.jpg",
+      ];
+      QUICK.forEach((line) => {
+        const [v, c, en, ar, r, th] = line.split("|").map((x) => x.trim());
+        if (!v) return;
+        P.push({
+          v,
+          c: ["reels", "longform", "ads"].includes(c)
+            ? c
+            : /\/shorts\//.test(v)
+              ? "reels"
+              : "ads",
+          en: en || "Project",
+          ar: ar || en || "Project",
+          r: r || undefined,
+          th: th || undefined,
+          tags: [],
+        });
+      });
+      /* fill any field you left out, so short entries never break the page */
+      P.forEach((p) => {
+        p.en = p.en || p.ar || "Project";
+        p.ar = p.ar || p.en;
+        p.de = p.de || "";
+        p.da = p.da || p.de;
+        p.tags = p.tags || [];
+        p.c = p.c || "ads";
+      });
+
       /* ===== TEXT: [English, Arabic] ===== */
       const L = {
         nHome: ["Home", "الرئيسية"],
@@ -3087,8 +3128,8 @@
           "إعلان 30-60 ثانية|موشن جرافيكس متقدم|مونتاج وتلوين احترافي|ساوند ديزاين كامل|3 تعديلات مجاناً",
         ],
         note: [
-          "Prices are approximate and depend on project complexity. Message me for a final quote.",
-          "الأسعار تقريبية وبتتغير حسب تعقيد الشغل. كلمني عشان نحدد السعر النهائي.",
+          'Prices are "starting at" and depend on video length and complexity. Payment terms are agreed with each client, and extra revisions beyond the included rounds are quoted separately.',
+          'الأسعار "تبدأ من" وبتتغير حسب طول الفيديو وتعقيد الشغل. طريقة الدفع بنتفق عليها مع كل عميل، والتعديلات الزيادة عن المحدد بتتحسب بشكل منفصل.',
         ],
         skT: ["Skills & <span>Tools</span>", "المهارات و<span>الأدوات</span>"],
         flowT: ["My <span>Workflow</span>", "طريقة <span>الشغل</span>"],
@@ -4139,8 +4180,13 @@
       /* ===== keyboard + dialog accessibility ===== */
       let lastFocus = null;
       function focusModal() {
-        setTimeout(() => $("#modal .mx").focus(), 80);
-      } /* wait for the fade-in so the button can take focus */
+        let n = 0;
+        const t = setInterval(() => {
+          const b = $("#modal .mx");
+          b.focus();
+          if (document.activeElement === b || ++n > 40) clearInterval(t);
+        }, 50);
+      } /* retry until the fade-in lets the button take focus */
       document.addEventListener("focusin", (e) => {
         if (!$("#modal").classList.contains("open")) lastFocus = e.target;
       });
@@ -4235,6 +4281,17 @@
           `"0${$$("section:not(.hero)").filter((x) => !x.hidden).length}"`,
         );
       }
+
+      /* apply PRICES to the package cards */
+      $$(".sc").forEach((c) => {
+        const k = (c.querySelector("[data-wa]") || {}).dataset
+          ? c.querySelector("[data-wa]").dataset.wa
+          : null;
+        const n = [...c.querySelector(".price").childNodes].find(
+          (x) => x.nodeType === 3 && /\d/.test(x.nodeValue),
+        );
+        if (n && k && PRICES[k] != null) n.nodeValue = PRICES[k] + " ";
+      });
 
       /* apply SITE links; hide any that are empty */
       $$("[data-link]").forEach((a) => {
